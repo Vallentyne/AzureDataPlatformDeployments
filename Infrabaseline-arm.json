@@ -49,7 +49,7 @@
       },
         "subnet2Name": {
           "type": "string",
-          "defaultValue": "AzureBastion",
+          "defaultValue": "AzureBastionSubnet",
           "metadata": {
             "description": "Subnet 2 Name"
           }
@@ -270,7 +270,7 @@
             "properties": {
                 "publicIPAllocationMethod": "Static"
               }
-                },
+          },
           {
             "apiVersion": "2020-04-01",
             "type": "Microsoft.Network/bastionHosts",
