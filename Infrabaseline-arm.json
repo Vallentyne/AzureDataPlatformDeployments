@@ -129,7 +129,6 @@
             }
           }
         ],
-            "enableDdosProtection": true,
             "enableVmProtection": false
       }
     },
@@ -137,6 +136,10 @@
       "apiVersion": "2017-05-01-preview",
       "type": "Microsoft.Network/virtualnetworks/providers/diagnosticSettings",
       "name": "[concat(parameters('virtualnetworkname'), '/microsoft.insights/', parameters('omsworkspacename'))]",
+      "dependsOn": [
+        "[concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
+        "[concat('Microsoft.Network/virtualNetworks', parameters('virtualnetworkname'))]"
+      ],
       "properties": {
         "workspaceId": "[resourceId('microsoft.operationalinsights/workspaces/', parameters('omsworkspacename'))]",
         "logs": [
