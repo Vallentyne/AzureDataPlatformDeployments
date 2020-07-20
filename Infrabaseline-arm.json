@@ -192,7 +192,6 @@
       "apiVersion": "2019-07-01",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', toLower('windowsVM1storage'))]",
         "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NetworkInterface')]"
       ],
       "tags": {
