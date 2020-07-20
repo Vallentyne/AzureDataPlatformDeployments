@@ -11,7 +11,7 @@ Security accreditation of environments that include these Azure resources is a k
 | PBMM Control Name | Description |
 | --- | ---------- |
 |Location of Assets | All resources are created in Canada East |
-|AU-3 (2), AU-6 (4), AU-12 Auditing and Logging requirements | all deployed resources send logs to a Log Analytics workspace|
+|AU-3 (2), AU-6 (4), AU-12 Auditing and Logging requirements | All deployed resources send logs to a Log Analytics workspace|
 |SC-5 Denial of Service| DDOS policy is created and assigned to deployed VNET|
 |SC-7 Boundary Protection| Azure Bastion is used to protect deployed VM <br> Public endpoints are minimized where possible|
 |SC-28 (1) Protection of Information at Rest|Encryption of data at rest is deployed by default|
@@ -25,6 +25,6 @@ If you have been delegated a resource group in an existing subscription use this
 
 ### Deploy the SQL DW
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmaster%2FSQLDW-arm.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmaster%2FSQLDWnew-arm.json)
 
 If you have been delegated a subscription to deploy these resources, use this deployment:
