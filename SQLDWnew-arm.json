@@ -61,7 +61,7 @@
         "analysisServerAdmin":{
             "type":"string",
             "metadata": {
-                "description": "User principal name for an actual account in active directory"
+                "description": "User principal name for an actual account in active directory - expressed as user@domain.com"
             }
         }
     },
