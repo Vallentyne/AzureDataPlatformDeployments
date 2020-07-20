@@ -52,6 +52,12 @@
                 "description": "Analysis Server Name"
             }
         },
+        "deploymentlocation": {
+            "type":"string",
+            "metadata": {
+                "description": "Region for all deployments"
+            }
+        },
         "analysisServerAdmin":{
             "type":"string",
             "metadata": {
@@ -62,8 +68,7 @@
     "variables": {
         "version": "12.0",
         "dwDatabaseName": "wwi",
-        "collation": "SQL_Latin1_General_CP1_CI_AS",
-        "deploymentLocation": "canadacentral"
+        "collation": "SQL_Latin1_General_CP1_CI_AS"
     },
     "resources": [
         {
@@ -74,7 +79,7 @@
               "name": "Standard_RAGRS"
             },
             "kind": "BlobStorage",
-            "location": "[variables('deploymentLocation')]",
+            "location": "[parameters('deploymentLocation')]",
             "tags": {},
             "properties": {
               "accessTier": "Hot",
@@ -95,7 +100,7 @@
         },
         {
             "apiVersion": "2019-06-01-preview",
-            "location": "[variables('deploymentLocation')]",
+            "location": "[parameters('deploymentLocation')]",
             "name": "[parameters('dwServerName')]",
             "properties": {
                 "administratorLogin": "[parameters('dwAdminLogin')]",
@@ -108,7 +113,7 @@
                     "dependsOn": [
                         "[parameters('dwServerName')]"
                     ],
-                    "location": "[variables('deploymentLocation')]",
+                    "location": "[parameters('deploymentLocation')]",
                     "name": "[variables('dwDatabaseName')]",
                     "properties": {
                         "edition": "DataWarehouse",
@@ -122,7 +127,7 @@
                     "dependsOn": [
                         "[parameters('dwServerName')]"
                     ],
-                    "location": "[variables('deploymentLocation')]",
+                    "location": "[parameters('deploymentLocation')]",
                     "name": "AllowAllWindowsAzureIps",
                     "properties": {
                         "endIpAddress": "0.0.0.0",
@@ -137,7 +142,7 @@
             "name": "[parameters('analysisServerName')]",
             "type": "Microsoft.AnalysisServices/servers",
             "apiVersion": "2017-08-01",
-            "location": "[variables('deploymentLocation')]",
+            "location": "[parameters('deploymentLocation')]",
             "sku": {
               "name": "[parameters('analysisServerSKU')]"
             },
