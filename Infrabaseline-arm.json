@@ -39,7 +39,11 @@
           "metadata": {
             "description": "Subnet 1 Name"
           }
+      },
+      "adminpassword": {
+        "type": "string"
       }
+      
     },
     "variables": {
         "batch1": {
@@ -205,7 +209,7 @@
         "osProfile": {
           "computerName": "windowsVM1",
           "adminUsername": "adminUsername",
-          "adminPassword": "adminPassword"
+          "adminPassword": "[parameters('adminpassword')]"
         },
         "storageProfile": {
           "imageReference": {
