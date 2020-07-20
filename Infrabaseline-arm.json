@@ -18,29 +18,27 @@
         "virtualnetworkname": {
             "type": "string"
         },
-              "vnetAddressPrefix": {
-        "type": "string",
-        "defaultValue": "10.0.0.0/16",
-        "metadata": {
-          "description": "VNet Address namespace prefix"
-        }
+        "vnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+              "description": "VNet Address namespace prefix"
+            }
       },
-      "subnet1Prefix": {
-        "type": "string",
-        "defaultValue": "10.0.0.0/24",
-        "metadata": {
-          "description": "Subnet 1 Prefix"
-        }
+        "subnet1Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.0.0/24",
+          "metadata": {
+            "description": "Subnet 1 Prefix"
+          }
       },
-      "subnet1Name": {
-        "type": "string",
-        "defaultValue": "Subnet1",
-        "metadata": {
-          "description": "Subnet 1 Name"
-        }
+        "subnet1Name": {
+          "type": "string",
+          "defaultValue": "Subnet1",
+          "metadata": {
+            "description": "Subnet 1 Name"
+          }
       }
-
-
     },
     "variables": {
         "batch1": {
@@ -128,8 +126,7 @@
                             ]              
             }
           }
-        ],
-            "enableVmProtection": false
+        ]
       }
     },
     {
@@ -138,7 +135,7 @@
       "name": "[concat(parameters('virtualnetworkname'), '/microsoft.insights/', parameters('omsworkspacename'))]",
       "dependsOn": [
         "[concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
-        "[concat('Microsoft.Network/virtualNetworks', parameters('virtualnetworkname'))]"
+        "[parameters('virtualnetworkname')]"
       ],
       "properties": {
         "workspaceId": "[resourceId('microsoft.operationalinsights/workspaces/', parameters('omsworkspacename'))]",
