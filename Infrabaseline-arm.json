@@ -58,10 +58,12 @@
         "type": "securestring"
       },
       "bastion-ip-name": {
-        "type": "string"
+        "type": "string",
+        "defaultValue": "AzureBastionIP"
       },
       "bastion-host-name": {
-        "type": "string"
+        "type": "string",
+        "defaultValue": "Bastion"
       }
 
     },
@@ -277,9 +279,8 @@
             "name": "[parameters('bastion-host-name')]",
             "location": "[parameters('region')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIpAddresses', parameters('bastion-ip-name'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualnetworkname'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworkname'), parameters('subnet2Name'))]"
+                "[parameters('bastion-ip-name')]",
+                "[parameters('virtualnetworkname')]"
               ],
             "properties": {
                 "ipConfigurations": [
