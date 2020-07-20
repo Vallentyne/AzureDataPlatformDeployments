@@ -8,13 +8,39 @@
                 "description": "Assign a name for the Log Analytic Workspace Name"
             }
         },
-        "omsWorkspaceRegion": {
+        "Region": {
             "type": "string",
             "defaultValue": "Canada Central",
             "metadata": {
-                "description": "Specify the region for your Workspace"
+                "description": "Specify the region for your resources"
             }
+        },
+        "virtualnetworkname": {
+            "type": "string"
+        },
+              "vnetAddressPrefix": {
+        "type": "string",
+        "defaultValue": "10.0.0.0/16",
+        "metadata": {
+          "description": "VNet Address namespace prefix"
         }
+      },
+      "subnet1Prefix": {
+        "type": "string",
+        "defaultValue": "10.0.0.0/24",
+        "metadata": {
+          "description": "Subnet 1 Prefix"
+        }
+      },
+      "subnet1Name": {
+        "type": "string",
+        "defaultValue": "Subnet1",
+        "metadata": {
+          "description": "Subnet 1 Name"
+        }
+      }
+
+
     },
     "variables": {
         "batch1": {
@@ -29,7 +55,7 @@
     "resources": [
         {
             "apiVersion": "2020-03-01-preview",
-            "location": "[parameters('omsWorkspaceRegion')]",
+            "location": "[parameters('Region')]",
             "name": "[parameters('omsWorkspaceName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "comments": "Log Analytics workspace",
@@ -58,7 +84,7 @@
             "apiVersion": "2015-11-01-preview",
             "type": "Microsoft.OperationsManagement/solutions",
             "name": "[concat(variables('batch1').solutions[copyIndex()].Name)]",
-            "location": "[parameters('omsWorkspaceRegion')]",
+            "location": "[parameters('Region')]",
             "dependsOn": [
                 "[concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]"
             ],
@@ -75,7 +101,67 @@
                 "promotionCode": "",
                 "publisher": "Microsoft"
             }
-        }
+        },
+        {
+        "apiVersion": "2018-10-01",
+        "type": "Microsoft.Network/virtualNetworks",
+        "name": "[parameters('virtualnetworkName')]",
+        "location": "[parameters('region')]",
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[parameters('vnetAddressPrefix')]"
+            ]
+          },
+        "subnets": [
+          {
+            "name": "[parameters('subnet1Name')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnet1Prefix')]",
+              "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.KeyVault",
+                                    "locations": [
+                                        "*"
+                                    ]
+                                }
+                            ]              
+            }
+          }
+        ],
+            "enableDdosProtection": true,
+            "enableVmProtection": false
+      }
+    },
+    {
+      "apiVersion": "2017-05-01-preview",
+      "type": "Microsoft.Network/virtualnetworks/providers/diagnosticSettings",
+      "name": "[concat(parameters('virtualnetworkname'), '/microsoft.insights/', parameters('omsworkspacename'))]",
+      "properties": {
+        "workspaceId": "[resourceId('microsoft.operationalinsights/workspaces/', parameters('omsworkspacename'))]",
+        "logs": [
+          {
+            "category": "VMProtectionAlerts",
+            "enabled": true,
+            "retentionPolicy": {
+              "days": 0,
+              "enabled": false
+            }
+          }         
+        ],
+          "metrics": [
+            {
+              "category": "AllMetrics",
+              "enabled": true,
+              "retentionPolicy": {
+              "days": 0,
+              "enabled": false
+            }
+            }
+          ]
+      }
+    }
+
     ],
     "outputs": {}
 }

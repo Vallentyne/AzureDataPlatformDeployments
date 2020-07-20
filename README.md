@@ -12,7 +12,6 @@ Security accreditation of environments that include these Azure resources is a k
 | --- | ---------- |
 |Location of Assets | All resources are created in Canada East |
 |AU-3 (2), AU-6 (4), AU-12 Auditing and Logging requirements | All deployed resources send logs to a Log Analytics workspace|
-|SC-5 Denial of Service| DDOS policy is created and assigned to deployed VNET|
 |SC-7 Boundary Protection| Azure Bastion is used to protect deployed VM <br> Public endpoints are minimized where possible|
 |SC-28 (1) Protection of Information at Rest|Encryption of data at rest is deployed by default|
 |SI-4 System Monitoring|Log Analytics/Azure Monitor is the focal point for all logging <br> Azure Monitor alerts <br> Not deployed by this solution, but also possible to leverage is Azure Sentinel|
