@@ -34,7 +34,7 @@
         "storageAccountName": {
             "type":"string",
             "maxLength": 24,
-            "minLength": 3,
+            "minLength": 4,
             "metadata": {
                 "description": "Storage account for storing BCP output CSV files"
             }
@@ -42,7 +42,7 @@
         "analysisServerName": {
             "type":"string",
             "metadata": {
-                "description": "Analysis Server Name"
+                "description": "Analysis Server Name - must begin with a lowercase letter"
             }
         },
         "analysisServerSKU": {
