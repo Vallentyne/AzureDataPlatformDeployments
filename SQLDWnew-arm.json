@@ -34,7 +34,7 @@
         "storageAccountName": {
             "type":"string",
             "maxLength": 24,
-            "minLength": 4,
+            "minLength": 3,
             "metadata": {
                 "description": "Storage account for storing BCP output CSV files"
             }
@@ -105,7 +105,8 @@
             "properties": {
                 "administratorLogin": "[parameters('dwAdminLogin')]",
                 "administratorLoginPassword": "[parameters('dwAdminPassword')]",
-                "version": "[variables('version')]"
+                "version": "[variables('version')]",
+                "publicNetworkAccess": "Enabled"
             },
             "resources": [
                 {

@@ -9,13 +9,16 @@
             "value": "" 
         },
         "storageAccountName": {
-            "value": "" 
+            "value": "cv55544"
         },
         "analysisServerName": {
-            "value": "" 
+            "value": "as45" 
+        },
+        "deploymentlocation": {
+            "value": "eastus"
         },
         "analysisServerAdmin": {
-            "value": ""
+            "value": "covallen@microsoft.com" 
         }
     }
 }
