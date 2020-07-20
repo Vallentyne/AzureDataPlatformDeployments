@@ -40,8 +40,28 @@
             "description": "Subnet 1 Name"
           }
       },
+        "subnet2Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.1.0/24",
+          "metadata": {
+            "description": "Subnet 2 Prefix"
+          }
+      },
+        "subnet2Name": {
+          "type": "string",
+          "defaultValue": "AzureBastion",
+          "metadata": {
+            "description": "Subnet 2 Name"
+          }
+      },
       "adminpassword": {
         "type": "securestring"
+      },
+      "bastion-ip-name": {
+        "type": "string"
+      },
+      "bastion-host-name": {
+        "type": "string"
       }
 
     },
@@ -130,6 +150,12 @@
                                   }
                               ]              
               }
+            },
+            {
+              "name": "[parameters('subnet2Name')]",
+              "properties": {
+                "addressPrefix": "[parameters('subnet2Prefix')]"            
+              }
             }
           ]
           }
@@ -191,47 +217,85 @@
             ]
           }
         },
-    {
-      "name": "windowsVM1",
-      "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2019-07-01",
-      "location": "[parameters('Region')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
-      ],
-      "tags": {
-        "displayName": "windowsVM1"
-      },
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "Standard_B2ms"
-        },
-        "osProfile": {
-          "computerName": "windowsVM1",
-          "adminUsername": "adminUsername",
-          "adminPassword": "[parameters('adminpassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2016-Datacenter",
-            "version": "latest"
+        {
+          "name": "windowsVM1",
+          "type": "Microsoft.Compute/virtualMachines",
+          "apiVersion": "2019-07-01",
+          "location": "[parameters('Region')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
+          ],
+          "tags": {
+            "displayName": "windowsVM1"
           },
-          "osDisk": {
-            "name": "windowsVM1OSDisk",
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
+          "properties": {
+            "hardwareProfile": {
+              "vmSize": "Standard_B2ms"
+            },
+            "osProfile": {
+              "computerName": "windowsVM1",
+              "adminUsername": "adminUsername",
+              "adminPassword": "[parameters('adminpassword')]"
+            },
+            "storageProfile": {
+              "imageReference": {
+                "publisher": "MicrosoftWindowsServer",
+                "offer": "WindowsServer",
+                "sku": "2016-Datacenter",
+                "version": "latest"
+              },
+              "osDisk": {
+                "name": "windowsVM1OSDisk",
+                "caching": "ReadWrite",
+                "createOption": "FromImage"
+              }
+            },
+            "networkProfile": {
+              "networkInterfaces": [
+                {
+                  "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
+                }
+                ]
+              }
             }
-          ]
-        }
-      }
+          },
+          {
+            "apiVersion": "2019-02-01",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "name": "[parameters('bastion-ip-name')]",
+            "location": "[parameters('region')]",
+            "sku": {
+                "name": "Standard"
+              },
+            "properties": {
+                "publicIPAllocationMethod": "Static"
+              }
+                },
+          {
+            "apiVersion": "2020-04-01",
+            "type": "Microsoft.Network/bastionHosts",
+            "name": "[parameters('bastion-host-name')]",
+            "location": "[parameters('region')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIpAddresses', parameters('bastion-ip-name'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualnetworkname'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworkname'), parameters('subnet2Name'))]"
+              ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                      "name": "IpConf",
+                      "properties": {
+                          "subnet": {
+                              "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworkname'), parameters('subnet2Name'))]"
+                          },
+                          "publicIPAddress": {
+                              "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('bastion-ip-name'))]"
+                          }
+                      }
+                    }
+                ]
+            }
     }
 
     ],
