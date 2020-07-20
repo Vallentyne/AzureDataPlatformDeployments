@@ -10,7 +10,7 @@
         },
         "Region": {
             "type": "string",
-            "defaultValue": "East US",
+            "defaultValue": "[resourceGroup().location]",
             "metadata": {
                 "description": "Specify the region for your resources"
             }
