@@ -64,7 +64,16 @@
       "bastion-host-name": {
         "type": "string",
         "defaultValue": "Bastion"
-      }
+      },
+      "imageoffer": {
+        "type": "string",
+        "defaultValue": "WindowsServer"
+      },
+      "vmname": {
+        "type": "string",
+        "defaultvalue": "vm1"
+       }
+
 
     },
     "variables": {
@@ -220,7 +229,7 @@
           }
         },
         {
-          "name": "windowsVM1",
+          "name": "[parameters('vmname')]",
           "type": "Microsoft.Compute/virtualMachines",
           "apiVersion": "2019-07-01",
           "location": "[parameters('Region')]",
@@ -235,7 +244,7 @@
               "vmSize": "Standard_B2ms"
             },
             "osProfile": {
-              "computerName": "windowsVM1",
+              "computerName": "[parameters('vmname')]",
               "adminUsername": "adminUsername",
               "adminPassword": "[parameters('adminpassword')]"
             },
@@ -258,9 +267,32 @@
                   "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
                 }
                 ]
-              }
-            }
-          },
+              },
+              "resources": [
+                {
+                    "type": "extensions",
+                    "name": "Microsoft.EnterpriseCloud.Monitoring",
+                    "apiVersion": "2017-03-30",
+                    "location": "[parameters('region')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                        "type": "[if(equals(parameters('ImageOffer'), 'RHEL'),'OmsAgentForLinux','MicrosoftMonitoringAgent')]",
+                        "typeHandlerVersion": "[if(equals(parameters('ImageOffer'), 'RHEL'),'1.6','1.0')]",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "workspaceId": "[reference(resourceid(parameters('omsWorkspaceName'),'Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), '2015-11-01-preview').customerId]"
+                            },
+                        "protectedSettings": {
+                            "workspaceKey": "[listKeys(resourceId(parameters('omsWorkspaceName'),'Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), '2015-03-20').primarySharedKey]"
+                            }
+                        }
+                }
+              ]
+                }
+        },
           {
             "apiVersion": "2019-02-01",
             "type": "Microsoft.Network/publicIpAddresses",
@@ -337,7 +369,7 @@
                     }
                 ]
             }
-    }
+          }
 
     ],
     "outputs": {}
