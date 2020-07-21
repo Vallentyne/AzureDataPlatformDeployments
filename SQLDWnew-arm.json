@@ -63,6 +63,9 @@
             "metadata": {
                 "description": "User principal name for an actual account in active directory - expressed as user@domain.com"
             }
+        },
+        "omsworkspacename": {
+            "type": "string"
         }
     },
     "variables": {
@@ -124,6 +127,81 @@
                     "type": "databases"
                 },
                 {
+                    "apiVersion": "2019-06-01-preview",
+                    "dependsOn": [
+                        "[parameters('dwServerName')]"
+                    ],
+                    "location": "[parameters('deploymentLocation')]",
+                    "name": "master",
+                    "properties": {     },
+                    "type": "databases"
+                },
+                {
+                    "type": "databases/providers/diagnosticSettings",
+                    "name": "[concat('master/microsoft.insights/', parameters('omsWorkspaceName'))]",
+                    "dependsOn": [
+                        "[parameters('dwServerName')]",
+                        "[concat('Microsoft.Sql/servers/', parameters('dwServerName'), '/databases/master')]"
+                            ],
+                    "apiVersion": "2017-05-01-preview",
+                    "properties": {
+                        "name": "[concat('microsoft.insights/',parameters('dwServerName'))]",
+                        "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+                        "logs": [ 
+                            {
+                            "category": "SQLInsights",
+                            "enabled": true
+                            },
+                            {
+                                "category": "AutomaticTuning",
+                                "enabled": true
+                            },
+                            {
+                                "category": "QueryStoreRuntimeStatistics",
+                                "enabled": true
+                            },
+                            {
+                                "category": "QueryStoreWaitStatistics",
+                                "enabled": true
+                            },
+                            {
+                                "category": "Errors",
+                                "enabled": true
+                            },
+                            {
+                                "category": "DatabaseWaitStatistics",
+                                "enabled": true
+                            },
+                            {
+                                "category": "Timeouts",
+                                "enabled": true
+                            },
+                            {
+                                "category": "Blocks",
+                                "enabled": true
+                            },
+                            {
+                                "category": "Deadlocks",
+                                "enabled": true
+                            }
+                            ],
+                            "metrics": [
+                            {
+                                "category": "Basic",
+                                "enabled": true
+                            },
+                            {
+                                "category": "InstanceAndAppAdvanced",
+                                "enabled": true
+                            },
+                            {
+                                "category": "WorkloadManagement",
+                                "enabled": true
+                            }
+                            ]
+            }
+        },
+                {
                     "apiVersion": "2015-05-01-preview",
                     "dependsOn": [
                         "[parameters('dwServerName')]"
@@ -135,10 +213,28 @@
                         "startIpAddress": "0.0.0.0"
                     },
                     "type": "firewallrules"
+                },
+                {
+                "apiVersion": "2017-03-01-preview",
+                "type": "auditingSettings",
+                "name": "DefaultAuditingSettings",
+                "dependsOn": [
+                    "[parameters('dwServerName')]"
+                ],
+                "properties": {
+                    "State": "Enabled",
+                    "auditActionsAndGroups": [
+                        "BATCH_COMPLETED_GROUP",
+                        "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+                        "FAILED_DATABASE_AUTHENTICATION_GROUP"
+                        ],
+                    "isAzureMonitorTargetEnabled": true
+                }
                 }
             ],
             "type": "Microsoft.Sql/servers"
         },
+        
         {
             "name": "[parameters('analysisServerName')]",
             "type": "Microsoft.AnalysisServices/servers",

@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "dwAdminLogin": {
-            "value": "" 
+            "value": "covallenadmin" 
         },
         "dwAdminPassword": {
-            "value": "" 
+            "value": "TheKill3rs!!!!" 
         },
         "storageAccountName": {
-            "value": "cv55544"
+            "value": "cv55444"
         },
         "analysisServerName": {
             "value": "as45" 
@@ -19,6 +19,9 @@
         },
         "analysisServerAdmin": {
             "value": "covallen@microsoft.com" 
+        },
+        "omsworkspacename": {
+            "value": "cvlaw222211" 
         }
     }
 }
