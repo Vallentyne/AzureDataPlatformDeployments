@@ -27,7 +27,7 @@
             "value": "AzureBastionSubnet"
         },
         "adminpassword": {
-            "value": "TheKill3rs!!!!" 
+            "value": "" 
         },
         "bastion-ip-name": {
             "value": "AzureBastionIP"
