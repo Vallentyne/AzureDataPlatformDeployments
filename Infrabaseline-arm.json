@@ -311,7 +311,7 @@
             "apiVersion": "2017-05-01-preview",
             "properties": {
               "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
-              "workspaceId": "[resourceid('Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+              "workspaceId": "[resourceid('Microsoft.OperationalInsights/workspaces', resourceGroup() ,parameters('omsWorkspaceName'))]",
               "logs": [
                 {
                   "category": "DDoSProtectionNotifications",
