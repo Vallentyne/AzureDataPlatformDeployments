@@ -20,16 +20,12 @@ These controls are also expressed as part of the [Canadian Federal PBMM Azure Bl
 
 ## Deploy the Environment
 
-If you have been delegated a resource group in an existing subscription use this deployment:
-
 ### Deploy Core Infrastructure Resources
 
-This includes a Log Analytics Workspace, and other components needed for compliance.
+This includes a Log Analytics Workspace, virtual network, VM for data work, Bastion and other components needed for compliance.
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmaster%2FInfrabaseline-arm.json)
 
 ### Deploy the SQL DW
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmaster%2FSQLDWnew-arm.json)
-
-

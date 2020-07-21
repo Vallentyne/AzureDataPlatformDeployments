@@ -274,6 +274,46 @@
               }
           },
           {
+            "type": "Microsoft.Network/publicIPAddresses/providers/diagnosticSettings",
+            "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",
+            "apiVersion": "2017-05-01-preview",
+            "properties": {
+              "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
+              "workspaceId": "[parameters('omsWorkspaceName')]",
+              "logs": [
+                {
+                  "category": "DDoSProtectionNotifications",
+                  "enabled": true,
+                  "retentionPolicy": {
+                    "days": 0,
+                    "enabled": false
+                  }
+                },
+                {
+                  "category": "DDoSMitigationReports",
+                  "enabled": true,
+                  "retentionPolicy": {
+                    "days": 0,
+                    "enabled": false
+                  }
+                }
+              ],
+              "metrics": [
+                {
+                  "category": "AllMetrics",
+                  "enabled": true,
+                  "retentionPolicy": {
+                    "days": 0,
+                    "enabled": false
+                  }
+                }
+              ]
+            },
+            "dependsOn": [
+              "[parameters('bastion-ip-name')]"
+            ]
+          },
+          {
             "apiVersion": "2020-04-01",
             "type": "Microsoft.Network/bastionHosts",
             "name": "[parameters('bastion-host-name')]",
