@@ -229,6 +229,29 @@
           }
         },
         {
+            "type": "Microsoft.Network/networkInterfaces/providers/diagnosticSettings",
+            "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('omsWorkspaceName'))]",
+            "apiVersion": "2017-05-01-preview",
+            "properties": {
+              "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+              "logs": [       ],
+              "metrics": [
+                {
+                  "category": "AllMetrics",
+                  "enabled": true,
+                  "retentionPolicy": {
+                    "days": 0,
+                    "enabled": false
+                  }
+                }
+                   ]
+            },
+            "dependsOn": [
+              "windowsVM1-NIC"
+            ]
+          },
+        {
           "name": "[parameters('vmname')]",
           "type": "Microsoft.Compute/virtualMachines",
           "apiVersion": "2019-07-01",
@@ -267,8 +290,9 @@
                   "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
                 }
                 ]
-              },
-              "resources": [
+              }
+          },
+          "resources": [
                 {
                     "type": "extensions",
                     "name": "Microsoft.EnterpriseCloud.Monitoring",
@@ -283,15 +307,14 @@
                         "typeHandlerVersion": "[if(equals(parameters('ImageOffer'), 'RHEL'),'1.6','1.0')]",
                         "autoUpgradeMinorVersion": true,
                         "settings": {
-                            "workspaceId": "[reference(resourceid(parameters('omsWorkspaceName'),'Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), '2015-11-01-preview').customerId]"
+                            "workspaceId": "[reference(resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName')), '2015-11-01-preview').customerId]"
                             },
                         "protectedSettings": {
-                            "workspaceKey": "[listKeys(resourceId(parameters('omsWorkspaceName'),'Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName')), '2015-03-20').primarySharedKey]"
+                            "workspaceKey": "[listKeys(resourceId(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName')), '2015-03-20').primarySharedKey]"
                             }
                         }
                 }
               ]
-                }
         },
           {
             "apiVersion": "2019-02-01",
@@ -311,7 +334,7 @@
             "apiVersion": "2017-05-01-preview",
             "properties": {
               "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
-              "workspaceId": "[resourceid('Microsoft.OperationalInsights/workspaces', resourceGroup() ,parameters('omsWorkspaceName'))]",
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
               "logs": [
                 {
                   "category": "DDoSProtectionNotifications",
@@ -369,6 +392,29 @@
                     }
                 ]
             }
+          },
+          {
+            "type": "Microsoft.Network/bastionhosts/providers/diagnosticSettings",
+            "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",
+            "apiVersion": "2017-05-01-preview",
+            "properties": {
+              "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+              "logs": [
+                {
+                  "category": "BastionAuditLogs",
+                  "enabled": true,
+                  "retentionPolicy": {
+                    "days": 0,
+                    "enabled": false
+                  }
+                }
+              ],
+              "metrics": [     ]
+            },
+            "dependsOn": [
+              "[parameters('bastion-host-name')]"
+            ]
           }
 
     ],
