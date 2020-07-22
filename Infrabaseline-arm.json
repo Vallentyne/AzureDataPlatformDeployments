@@ -200,7 +200,8 @@
                     "enabled": false
                   }
                 }
-              ]
+              ],
+              "logAnalyticsDestinationType": "Dedicated"
           }
         },
         {
@@ -245,7 +246,8 @@
                     "enabled": false
                   }
                 }
-                   ]
+                   ],
+                   "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
               "windowsVM1-NIC"
@@ -362,7 +364,8 @@
                     "enabled": false
                   }
                 }
-              ]
+              ],
+              "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
               "[parameters('bastion-ip-name')]"
@@ -411,7 +414,7 @@
                 }
               ],
               "metrics": [     ],
-              logAnalyticsDestinationType": "Dedicated"
+              "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
               "[parameters('bastion-host-name')]"
