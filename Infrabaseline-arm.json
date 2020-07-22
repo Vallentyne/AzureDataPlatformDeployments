@@ -410,7 +410,8 @@
                   }
                 }
               ],
-              "metrics": [     ]
+              "metrics": [     ],
+              logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
               "[parameters('bastion-host-name')]"
