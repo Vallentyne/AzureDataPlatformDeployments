@@ -12,6 +12,7 @@
         },
         "dwAdminLogin": {
             "type": "string",
+            "defaultValue": "DWserveradmin",
             "metadata": {
                 "description": "Datawarehouse SQL server admin user"
                 }
@@ -41,6 +42,7 @@
         },
         "analysisServerName": {
             "type":"string",
+            "defaultValue": "srvanalysis44",
             "metadata": {
                 "description": "Analysis Server Name - must begin with a lowercase letter"
             }
@@ -54,6 +56,7 @@
         },
         "deploymentlocation": {
             "type":"string",
+            "defaultValue": "[resourceGroup().Region]",
             "metadata": {
                 "description": "Region for all deployments"
             }
@@ -86,6 +89,7 @@
         },
         "customVirtualNetworkname": {
             "type": "string",
+            "defaultValue": "vnet1",
             "metadata": {
                 "description": "The name of the custom virtual network. Must be in the same RG"
             }
