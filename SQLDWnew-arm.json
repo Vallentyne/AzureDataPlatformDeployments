@@ -66,12 +66,52 @@
         },
         "omsworkspacename": {
             "type": "string"
+        },
+        "workspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Azure Databricks workspace to create."
+            }
+        },
+        "pricingTier": {
+            "type": "string",
+            "defaultValue": "premium",
+            "allowedValues": [
+                "standard",
+                "premium"
+            ],
+            "metadata": {
+                "description": "The pricing tier of workspace."
+            }
+        },
+        "customVirtualNetworkname": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the custom virtual network. Must be in the same RG"
+            }
+        },
+        "customPublicSubnetName": {
+            "type": "string",
+            "defaultValue": "DBpublic-subnet",
+            "metadata": {
+                "description": "The name of the public subnet in the custom VNet."
+            }
+        },
+        "customPrivateSubnetName": {
+            "type": "string",
+            "defaultValue": "DBprivate-subnet",
+            "metadata": {
+                "description": "The name of the private subnet in the custom VNet."
+            }
         }
     },
     "variables": {
         "version": "12.0",
         "dwDatabaseName": "wwi",
-        "collation": "SQL_Latin1_General_CP1_CI_AS"
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "managedResourceGroupId": "[concat(subscription().id, '/resourceGroups/', variables('managedResourceGroupName'))]",
+        "managedResourceGroupName": "[concat('databricks-rg-', parameters('workspaceName'), '-', uniqueString(parameters('workspaceName'), resourceGroup().id))]",
+        "customvirtualnetworkid": "[resourceid(resourceGroup().name,'Microsoft.Network/virtualNetworks', parameters('customVirtualNetworkname'))]"
     },
     "resources": [
         {
@@ -110,7 +150,7 @@
                 "administratorLoginPassword": "[parameters('dwAdminPassword')]",
                 "version": "[variables('version')]",
                 "publicNetworkAccess": "Enabled"
-            },
+                },
             "resources": [
                 {
                     "apiVersion": "2019-06-01-preview",
@@ -189,8 +229,8 @@
                                 "enabled": true
                             }
                             ]
-            }
-        },
+                        }
+                },
                 {
                     "apiVersion": "2019-06-01-preview",
                     "dependsOn": [
@@ -296,7 +336,7 @@
                     "isAzureMonitorTargetEnabled": true
                 }
                 }
-            ],
+                ],
             "type": "Microsoft.Sql/servers"
         },
         
@@ -316,7 +356,31 @@
                 ]
               }
             }
-          }
+          },
+        {
+            "apiVersion": "2018-04-01",
+            "location": "[parameters('deploymentlocation')]",
+            "name": "[parameters('workspaceName')]",
+            "sku": {
+            "name": "[parameters('pricingTier')]"
+            },
+            "comments": "The resource group specified will be locked after deployment.",
+            "properties": {
+            "ManagedResourceGroupId": "[variables('managedResourceGroupId')]",
+            "parameters": {
+                "customVirtualNetworkId": {
+                "value": "[variables('customVirtualNetworkid')]"
+                },
+                "customPublicSubnetName": {
+                "value": "[parameters('customPublicSubnetName')]"
+                },
+                "customPrivateSubnetName": {
+                "value": "[parameters('customPrivateSubnetName')]"
+                }
+            }
+            },
+            "type": "Microsoft.Databricks/workspaces"
+  }
     ],
     "outputs": {}
 }

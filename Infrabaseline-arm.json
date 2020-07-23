@@ -54,6 +54,34 @@
             "description": "Subnet 2 Name"
           }
       },
+        "subnet3Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.2.0/24",
+          "metadata": {
+            "description": "Subnet 3 Prefix"
+          }
+      },
+        "subnet3Name": {
+          "type": "string",
+          "defaultValue": "DBpublic-subnet",
+          "metadata": {
+            "description": "Subnet 3 Name"
+          }
+      },
+        "subnet4Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.3.0/24",
+          "metadata": {
+            "description": "Subnet 4 Prefix"
+          }
+      },
+        "subnet4Name": {
+          "type": "string",
+          "defaultValue": "DBprivate-subnet",
+          "metadata": {
+            "description": "Subnet 4 Name"
+          }
+      },
       "adminpassword": {
         "type": "securestring"
       },
@@ -84,7 +112,8 @@
                     "marketplaceName": "SQLAssessment"
                 }
             ]
-        }
+        },
+        "firstnsgname": "DatabricksNSG"
     },
     "resources": [
         {
@@ -137,10 +166,20 @@
             }
         },
         {
+          "apiVersion": "2019-06-01",
+          "type": "Microsoft.Network/networkSecurityGroups",
+          "name": "[variables('firstNSGName')]",
+          "location": "[parameters('Region')]",
+          "dependsOn": []
+        },
+        {
           "apiVersion": "2018-10-01",
           "type": "Microsoft.Network/virtualNetworks",
           "name": "[parameters('virtualnetworkName')]",
           "location": "[parameters('region')]",
+          "dependsOn": [
+            "[variables('firstnsgname')]"
+            ],
           "properties": {
             "addressSpace": {
               "addressPrefixes": [
@@ -166,6 +205,40 @@
               "name": "[parameters('subnet2Name')]",
               "properties": {
                 "addressPrefix": "[parameters('subnet2Prefix')]"            
+              }
+            },
+            {
+              "name": "[parameters('subnet3Name')]",
+              "properties": {
+                "addressPrefix": "[parameters('subnet3Prefix')]",
+                "networkSecurityGroup": {
+                "id": "[resourceid('Microsoft.Network/networkSecurityGroups', variables('firstnsgname'))]"
+                    },
+                 "delegations": [
+                {
+                  "name": "databricks-del-private",
+                  "properties": {
+                    "serviceName": "Microsoft.Databricks/workspaces"
+                  }
+                }
+              ]            
+              }
+            },
+            {
+              "name": "[parameters('subnet4Name')]",
+              "properties": {
+                  "addressPrefix": "[parameters('subnet4Prefix')]",
+                  "networkSecurityGroup": {
+                  "id": "[resourceid('Microsoft.Network/networkSecurityGroups', variables('firstnsgname'))]"
+                    },
+                  "delegations": [
+                {
+                  "name": "databricks-del-private",
+                  "properties": {
+                    "serviceName": "Microsoft.Databricks/workspaces"
+                  }
+                }
+              ]            
               }
             }
           ]

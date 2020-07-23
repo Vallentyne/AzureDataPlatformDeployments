@@ -22,6 +22,12 @@
         },
         "omsworkspacename": {
             "value": "cvlaw222211" 
+        },
+        "workspaceName": {
+            "value": "Databrickscovallen"
+        },
+        "customVirtualNetworkname": {
+            "value": "vnet2"
         }
     }
 }
