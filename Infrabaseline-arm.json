@@ -492,6 +492,18 @@
             "dependsOn": [
               "[parameters('bastion-host-name')]"
             ]
+          },
+          {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "linkedTemplate",
+            "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                "uri":"https://raw.githubusercontent.com/Vallentyne/AzureDataPlatformDeployments/main/SQLDWnew-arm.json",
+                "contentVersion":"1.0.0.0"
+              }
+            }
           }
 
     ],
