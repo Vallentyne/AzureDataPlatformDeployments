@@ -604,7 +604,10 @@
                 "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"},
                 "omsworkspacename": {"value": "[parameters('LogAnalyticsWorkspaceName')]"}
               }
-            }
+            },
+            "dependsOn": [
+              "[parameters('bastion-host-name')]"
+            ]
           }
     ],
     "outputs": {}
