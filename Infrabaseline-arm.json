@@ -15,7 +15,6 @@
                 "description": "Assign a name for the Log Analytic Workspace Name"
             }
         },
-        
         "virtualnetworkname": {
             "type": "string",
             "defaultValue": "vnet1"
@@ -107,7 +106,6 @@
       },
       "dwServerName": {
         "type": "string",
-        "defaultValue": "DWserver44",
         "metadata": {
             "description": "SQL Data Warehouse Name"
               }
@@ -142,7 +140,6 @@
         },
         "analysisServerName": {
             "type":"string",
-            "defaultValue": "srvanalysis44",
             "metadata": {
                 "description": "Analysis Server Name - must begin with a lowercase letter"
             }

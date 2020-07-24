@@ -23,4 +23,3 @@ These controls are also expressed as part of the [Canadian Federal PBMM Azure Bl
 This includes a Log Analytics Workspace, virtual network, VM for data work, Bastion and other components needed for compliance.
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmain%2FInfrabaseline-arm.json)
-
