@@ -100,7 +100,102 @@
       "vmname": {
         "type": "string",
         "defaultvalue": "vm1"
-       }
+       },
+      "dwServerName": {
+        "type": "string",
+        "defaultValue": "DWserver44",
+        "metadata": {
+            "description": "SQL Data Warehouse Name"
+              }
+
+      },
+      "dwAdminLogin": {
+        "type": "string",
+        "defaultValue": "DWserveradmin",
+        "metadata": {
+          "description": "Datawarehouse SQL server admin user"
+                }
+
+      },
+      "dwAdminPassword": {
+        "type": "securestring",
+        "metadata": {
+          "description": "Datawarehouse SQL server admin password"
+                }
+        },
+      "dwPerformanceTier": {
+        "type": "string",
+        "defaultValue": "DW400",
+        "metadata": {
+                "description": "Performance Tier"
+                }
+        },
+        "storageAccountName": {
+            "type":"string",
+            "maxLength": 24,
+            "minLength": 3,
+            "metadata": {
+                "description": "Storage account for storing BCP output CSV files"
+            }
+        },
+        "analysisServerName": {
+            "type":"string",
+            "defaultValue": "srvanalysis44",
+            "metadata": {
+                "description": "Analysis Server Name - must begin with a lowercase letter"
+            }
+        },
+        "analysisServerSKU": {
+            "type":"string",
+            "defaultValue": "B1",
+            "metadata": {
+                "description": "Analysis Server Name"
+            }
+        },
+        "deploymentlocation": {
+            "type":"string",
+            "defaultValue": "[resourceGroup().Region]",
+            "metadata": {
+                "description": "Region for all deployments"
+            }
+        },
+        "analysisServerAdmin":{
+            "type":"string",
+            "metadata": {
+                "description": "User principal name for an actual account in active directory - expressed as user@domain.com"
+            }
+        },
+        "workspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the Azure Databricks workspace to create."
+            }
+        },
+        "pricingTier": {
+            "type": "string",
+            "defaultValue": "premium",
+            "allowedValues": [
+                "standard",
+                "premium"
+            ],
+            "metadata": {
+                "description": "The pricing tier of workspace."
+            }
+        },
+        "customPublicSubnetName": {
+            "type": "string",
+            "defaultValue": "DBpublic-subnet",
+            "metadata": {
+                "description": "The name of the public subnet in the custom VNet."
+            }
+        },
+        "customPrivateSubnetName": {
+            "type": "string",
+            "defaultValue": "DBprivate-subnet",
+            "metadata": {
+                "description": "The name of the private subnet in the custom VNet."
+            }
+        }
 
 
     },
@@ -502,10 +597,19 @@
               "templateLink": {
                 "uri":"https://raw.githubusercontent.com/Vallentyne/AzureDataPlatformDeployments/main/SQLDWnew-arm.json",
                 "contentVersion":"1.0.0.0"
+              },
+              "parameters": {
+                "dwadminlogin":{"value": "[parameters('dwadminlogin')]"},
+                "dwadminpassword": {"value": "[parameters('dwadminpassword')]"},
+                "storageaccountname": {"value": "[parameters('storageAccountName')]"},
+                "analysisservername": {"value": "[parameters('analysisServerName')]"},
+                "deploymentlocation": {"value": "[parameters('deploymentlocation')]"},
+                "analysisserveradmin": {"value": "[parameters('analysisServerAdmin')]"},
+                "workspacename": {"value": "[parameters('workspaceName')]"},
+                "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"}
               }
             }
           }
-
     ],
     "outputs": {}
 }
