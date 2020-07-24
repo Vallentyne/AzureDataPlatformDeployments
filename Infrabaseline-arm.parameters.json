@@ -40,6 +40,24 @@
         },
         "vmname": {
             "value": "vm1"
+        },
+        "LogAnalyticsWorkspaceName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "VMadminpassword": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "dwAdminPassword": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "storageAccountName": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "analysisServerAdmin": {
+            "value": "" // TODO: Fill in parameter value
+        },
+        "DBworkspaceName": {
+            "value": "" // TODO: Fill in parameter value
         }
     }
 }

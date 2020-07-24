@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "omsWorkspaceName": {
+        "LogAnalyticsWorkspaceName": {
             "type": "string",
             "metadata": {
                 "description": "Assign a name for the Log Analytic Workspace Name"
@@ -82,8 +82,11 @@
             "description": "Subnet 4 Name"
           }
       },
-      "adminpassword": {
-        "type": "securestring"
+      "VMadminpassword": {
+        "type": "securestring",
+        "metadata": {
+            "description": "VM admin account password"
+          }
       },
       "bastion-ip-name": {
         "type": "string",
@@ -152,20 +155,13 @@
                 "description": "Analysis Server Name"
             }
         },
-        "deploymentlocation": {
-            "type":"string",
-            "defaultValue": "[resourceGroup().Region]",
-            "metadata": {
-                "description": "Region for all deployments"
-            }
-        },
         "analysisServerAdmin":{
             "type":"string",
             "metadata": {
                 "description": "User principal name for an actual account in active directory - expressed as user@domain.com"
             }
         },
-        "workspaceName": {
+        "DBworkspaceName": {
             "type": "string",
             "metadata": {
                 "description": "The name of the Azure Databricks workspace to create."
@@ -203,7 +199,7 @@
         "batch1": {
             "solutions": [
                 {
-                    "name": "[concat('SQLAssessment', '(', parameters('omsWorkspaceName'), ')')]",
+                    "name": "[concat('SQLAssessment', '(', parameters('loganalyticsWorkspaceName'), ')')]",
                     "marketplaceName": "SQLAssessment"
                 }
             ]
@@ -214,7 +210,7 @@
         {
             "apiVersion": "2020-03-01-preview",
             "location": "[parameters('Region')]",
-            "name": "[parameters('omsWorkspaceName')]",
+            "name": "[parameters('loganalyticsWorkspaceName')]",
             "type": "Microsoft.OperationalInsights/workspaces",
             "comments": "Log Analytics workspace",
             "properties": {
@@ -229,7 +225,7 @@
                     "type": "datasources",
                     "apiVersion": "2015-11-01-preview",
                     "dependsOn": [
-                        "[concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]"
+                        "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
                     ],
                     "kind": "AzureActivityLog",
                     "properties": {
@@ -244,14 +240,14 @@
             "name": "[concat(variables('batch1').solutions[copyIndex()].Name)]",
             "location": "[parameters('Region')]",
             "dependsOn": [
-                "[concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]"
+                "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ],
             "copy": {
                 "name": "solutionCopy",
                 "count": "[length(variables('batch1').solutions)]"
             },
             "properties": {
-                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]"
+                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]"
             },
             "plan": {
                 "name": "[variables('batch1').solutions[copyIndex()].name]",
@@ -342,13 +338,13 @@
         {
           "apiVersion": "2017-05-01-preview",
           "type": "Microsoft.Network/virtualnetworks/providers/diagnosticSettings",
-          "name": "[concat(parameters('virtualnetworkname'), '/microsoft.insights/', parameters('omsworkspacename'))]",
+          "name": "[concat(parameters('virtualnetworkname'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
           "dependsOn": [
-            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('omsWorkspaceName'))]",
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]",
             "[parameters('virtualnetworkname')]"
               ],
           "properties": {
-            "workspaceId": "[resourceId('microsoft.operationalinsights/workspaces/', parameters('omsworkspacename'))]",
+            "workspaceId": "[resourceId('microsoft.operationalinsights/workspaces/', parameters('loganalyticsWorkspaceName'))]",
             "logs": [
                 {
                 "category": "VMProtectionAlerts",
@@ -399,11 +395,11 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces/providers/diagnosticSettings",
-            "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('omsWorkspaceName'))]",
+            "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
             "apiVersion": "2017-05-01-preview",
             "properties": {
-              "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
-              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+              "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
               "logs": [       ],
               "metrics": [
                 {
@@ -439,7 +435,7 @@
             "osProfile": {
               "computerName": "[parameters('vmname')]",
               "adminUsername": "adminUsername",
-              "adminPassword": "[parameters('adminpassword')]"
+              "adminPassword": "[parameters('VMadminpassword')]"
             },
             "storageProfile": {
               "imageReference": {
@@ -477,10 +473,10 @@
                         "typeHandlerVersion": "[if(equals(parameters('ImageOffer'), 'RHEL'),'1.6','1.0')]",
                         "autoUpgradeMinorVersion": true,
                         "settings": {
-                            "workspaceId": "[reference(resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName')), '2015-11-01-preview').customerId]"
+                            "workspaceId": "[reference(resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName')), '2015-11-01-preview').customerId]"
                             },
                         "protectedSettings": {
-                            "workspaceKey": "[listKeys(resourceId(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName')), '2015-03-20').primarySharedKey]"
+                            "workspaceKey": "[listKeys(resourceId(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName')), '2015-03-20').primarySharedKey]"
                             }
                         }
                 }
@@ -500,11 +496,11 @@
           },
           {
             "type": "Microsoft.Network/publicIPAddresses/providers/diagnosticSettings",
-            "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",
+            "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
             "apiVersion": "2017-05-01-preview",
             "properties": {
-              "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
-              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+              "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
               "logs": [
                 {
                   "category": "DDoSProtectionNotifications",
@@ -566,11 +562,11 @@
           },
           {
             "type": "Microsoft.Network/bastionhosts/providers/diagnosticSettings",
-            "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",
+            "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
             "apiVersion": "2017-05-01-preview",
             "properties": {
-              "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('omsWorkspaceName'))]",          
-              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+              "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
               "logs": [
                 {
                   "category": "BastionAuditLogs",
@@ -603,9 +599,9 @@
                 "dwadminpassword": {"value": "[parameters('dwadminpassword')]"},
                 "storageaccountname": {"value": "[parameters('storageAccountName')]"},
                 "analysisservername": {"value": "[parameters('analysisServerName')]"},
-                "deploymentlocation": {"value": "[parameters('deploymentlocation')]"},
+                "deploymentlocation": {"value": "[parameters('Region')]"},
                 "analysisserveradmin": {"value": "[parameters('analysisServerAdmin')]"},
-                "workspacename": {"value": "[parameters('workspaceName')]"},
+                "workspacename": {"value": "[parameters('dbworkspaceName')]"},
                 "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"}
               }
             }
