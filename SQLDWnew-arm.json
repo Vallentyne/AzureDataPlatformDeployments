@@ -361,7 +361,35 @@
               }
             }
           },
-        {
+            {
+                    "type": "Microsoft.Analysisservices/servers/providers/diagnosticSettings",
+                    "name": "[concat(parameters('analysisServerName'),'/microsoft.insights/', parameters('omsWorkspaceName'))]",
+                    "dependsOn": [
+                        "[parameters('analysisServerName')]"
+                            ],
+                    "apiVersion": "2017-05-01-preview",
+                    "properties": {
+                        "name": "[concat(parameters('analysisServerName'),'/microsoft.insights/', parameters('omsWorkspaceName'))]",
+                        "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+                        "logs": [ 
+                            {
+                            "category": "Engine",
+                            "enabled": true
+                            },
+                            {
+                                "category": "Service",
+                                "enabled": true
+                            }
+                            ],
+                            "metrics": [
+                            {
+                                "category": "AllMetrics",
+                                "enabled": true
+                            }
+                            ]
+                        }
+                },
+            {
             "apiVersion": "2018-04-01",
             "location": "[parameters('deploymentlocation')]",
             "name": "[parameters('workspaceName')]",

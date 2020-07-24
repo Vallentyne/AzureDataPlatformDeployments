@@ -260,6 +260,29 @@
           "dependsOn": []
         },
         {
+          "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+          "name": "[concat(variables('firstNSGName'),'/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+          "dependsOn": [
+              "[variables('firstNSGName')]"
+                  ],
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+              "name": "[concat(variables('firstNSGName'),'/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
+              "logs": [ 
+                  {
+                  "category": "NetworkSecurityGroupEvent",
+                  "enabled": true
+                  },
+                  {
+                      "category": "NetworkSecurityGroupRuleCounter",
+                      "enabled": true
+                  }
+                  ],
+                  "metrics": [          ]
+                        }
+                },
+        {
           "apiVersion": "2018-10-01",
           "type": "Microsoft.Network/virtualNetworks",
           "name": "[parameters('virtualnetworkName')]",
