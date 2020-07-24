@@ -2,12 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "LogAnalyticsWorkspaceName": {
-            "type": "string",
-            "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
-            }
-        },
         "Region": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]",
@@ -15,6 +9,13 @@
                 "description": "Specify the region for your resources"
             }
         },
+        "LogAnalyticsWorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Assign a name for the Log Analytic Workspace Name"
+            }
+        },
+        
         "virtualnetworkname": {
             "type": "string",
             "defaultValue": "vnet1"
@@ -82,11 +83,19 @@
             "description": "Subnet 4 Name"
           }
       },
+        "vmname": {
+          "type": "string",
+          "defaultvalue": "vm1"
+       },
       "VMadminpassword": {
         "type": "securestring",
         "metadata": {
             "description": "VM admin account password"
           }
+      },
+      "imageoffer": {
+        "type": "string",
+        "defaultValue": "WindowsServer"
       },
       "bastion-ip-name": {
         "type": "string",
@@ -96,21 +105,12 @@
         "type": "string",
         "defaultValue": "Bastion"
       },
-      "imageoffer": {
-        "type": "string",
-        "defaultValue": "WindowsServer"
-      },
-      "vmname": {
-        "type": "string",
-        "defaultvalue": "vm1"
-       },
       "dwServerName": {
         "type": "string",
         "defaultValue": "DWserver44",
         "metadata": {
             "description": "SQL Data Warehouse Name"
               }
-
       },
       "dwAdminLogin": {
         "type": "string",
@@ -118,7 +118,6 @@
         "metadata": {
           "description": "Datawarehouse SQL server admin user"
                 }
-
       },
       "dwAdminPassword": {
         "type": "securestring",
@@ -602,7 +601,8 @@
                 "deploymentlocation": {"value": "[parameters('Region')]"},
                 "analysisserveradmin": {"value": "[parameters('analysisServerAdmin')]"},
                 "workspacename": {"value": "[parameters('dbworkspaceName')]"},
-                "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"}
+                "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"},
+                "omsworkspacename": {"value": "[parameters('LogAnalyticsWorkspaceName')]"}
               }
             }
           }
