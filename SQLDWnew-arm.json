@@ -308,8 +308,8 @@
                                 "enabled": true
                             }
                             ]
-            }
-        },
+                    }
+                },
                 {
                     "apiVersion": "2015-05-01-preview",
                     "dependsOn": [
@@ -324,44 +324,44 @@
                     "type": "firewallrules"
                 },
                 {
-                "apiVersion": "2017-03-01-preview",
-                "type": "auditingSettings",
-                "name": "DefaultAuditingSettings",
-                "dependsOn": [
-                    "[parameters('dwServerName')]"
-                ],
-                "properties": {
-                    "State": "Enabled",
-                    "auditActionsAndGroups": [
-                        "BATCH_COMPLETED_GROUP",
-                        "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
-                        "FAILED_DATABASE_AUTHENTICATION_GROUP"
-                        ],
-                    "isAzureMonitorTargetEnabled": true
-                }
-                }
-                ],
-            "type": "Microsoft.Sql/servers"
+                    "apiVersion": "2017-03-01-preview",
+                    "type": "auditingSettings",
+                    "name": "DefaultAuditingSettings",
+                    "dependsOn": [
+                        "[parameters('dwServerName')]"
+                    ],
+                    "properties": {
+                        "State": "Enabled",
+                        "auditActionsAndGroups": [
+                            "BATCH_COMPLETED_GROUP",
+                            "SUCCESSFUL_DATABASE_AUTHENTICATION_GROUP",
+                            "FAILED_DATABASE_AUTHENTICATION_GROUP"
+                            ],
+                        "isAzureMonitorTargetEnabled": true
+                    }
+                    }
+                    ],
+                "type": "Microsoft.Sql/servers"
         },
         
-        {
-            "name": "[parameters('analysisServerName')]",
-            "type": "Microsoft.AnalysisServices/servers",
-            "apiVersion": "2017-08-01",
-            "location": "[parameters('deploymentLocation')]",
-            "sku": {
-              "name": "[parameters('analysisServerSKU')]"
-            },
-            "tags": {},
-            "properties": {
-              "asAdministrators": {
-                "members": [
-                  "[parameters('analysisServerAdmin')]"
-                ]
-              }
-            }
-          },
-            {
+                {
+                    "name": "[parameters('analysisServerName')]",
+                    "type": "Microsoft.AnalysisServices/servers",
+                    "apiVersion": "2017-08-01",
+                    "location": "[parameters('deploymentLocation')]",
+                    "sku": {
+                    "name": "[parameters('analysisServerSKU')]"
+                    },
+                    "tags": {},
+                    "properties": {
+                    "asAdministrators": {
+                        "members": [
+                        "[parameters('analysisServerAdmin')]"
+                        ]
+                    }
+                    }
+                },
+                {
                     "type": "Microsoft.Analysisservices/servers/providers/diagnosticSettings",
                     "name": "[concat(parameters('analysisServerName'),'/microsoft.insights/', parameters('omsWorkspaceName'))]",
                     "dependsOn": [
@@ -389,30 +389,85 @@
                             ]
                         }
                 },
-            {
-            "apiVersion": "2018-04-01",
-            "location": "[parameters('deploymentlocation')]",
-            "name": "[parameters('workspaceName')]",
-            "sku": {
-            "name": "[parameters('pricingTier')]"
-            },
-            "comments": "The resource group specified will be locked after deployment.",
-            "properties": {
-            "ManagedResourceGroupId": "[variables('managedResourceGroupId')]",
-            "parameters": {
-                "customVirtualNetworkId": {
-                "value": "[variables('customVirtualNetworkid')]"
+                {
+                    "apiVersion": "2018-04-01",
+                    "location": "[parameters('deploymentlocation')]",
+                    "name": "[parameters('workspaceName')]",
+                    "sku": {
+                    "name": "[parameters('pricingTier')]"
+                    },
+                    "comments": "The resource group specified will be locked after deployment.",
+                    "properties": {
+                    "ManagedResourceGroupId": "[variables('managedResourceGroupId')]",
+                    "parameters": {
+                        "customVirtualNetworkId": {
+                        "value": "[variables('customVirtualNetworkid')]"
+                        },
+                        "customPublicSubnetName": {
+                        "value": "[parameters('customPublicSubnetName')]"
+                        },
+                        "customPrivateSubnetName": {
+                        "value": "[parameters('customPrivateSubnetName')]"
+                        }
+                    }
+                    },
+                    "type": "Microsoft.Databricks/workspaces"
                 },
-                "customPublicSubnetName": {
-                "value": "[parameters('customPublicSubnetName')]"
-                },
-                "customPrivateSubnetName": {
-                "value": "[parameters('customPrivateSubnetName')]"
+                {
+                    "type": "Microsoft.Databricks/workspaces/providers/diagnosticSettings",
+                    "name": "[concat(parameters('workspaceName'),'/microsoft.insights/', parameters('omsWorkspaceName'))]",
+                    "dependsOn": [
+                        "[parameters('workspaceName')]"
+                            ],
+                    "apiVersion": "2017-05-01-preview",
+                    "properties": {
+                        "name": "[concat(parameters('workspaceName'),'/microsoft.insights/', parameters('omsWorkspaceName'))]",
+                        "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('omsWorkspaceName'))]",
+                        "logs": [ 
+                            {
+                                "category": "dbfs",
+                                "enabled": true
+                            },
+                            {
+                                "category": "clusters",
+                                "enabled": true
+                            },
+                            {
+                                "category": "accounts",
+                                "enabled": true
+                            },
+                            {
+                                "category": "jobs",
+                                "enabled": true
+                            },
+                            {
+                                "category": "notebook",
+                                "enabled": true
+                            },
+                            {
+                                "category": "ssh",
+                                "enabled": true
+                            },
+                            {
+                                "category": "workspace",
+                                "enabled": true
+                            },
+                            {
+                                "category": "secrets",
+                                "enabled": true
+                            },
+                            {
+                                "category": "sqlpermissions",
+                                "enabled": true
+                            },
+                            {
+                                "category": "instancepools",
+                                "enabled": true
+                            }
+                            ],
+                            "metrics": [          ]
+                                    }
                 }
-            }
-            },
-            "type": "Microsoft.Databricks/workspaces"
-  }
     ],
     "outputs": {}
 }
