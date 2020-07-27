@@ -142,7 +142,75 @@
         "metadata": {
             "description": "The name of the private subnet in the custom VNet."
         }
-      }
+      },
+      "synapsename": {
+            "type": "string"
+        },
+        "defaultDataLakeStorageAccountName": {
+            "type": "string"
+        },
+        "defaultDataLakeStorageFilesystemName": {
+            "type": "string"
+        },
+        "sqlAdministratorLogin": {
+            "type": "string"
+        },
+        "sqlAdministratorLoginPassword": {
+            "type": "secureString",
+            "defaultValue": ""
+        },
+        "allowAllConnections": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "grantWorkspaceIdentityControlForSql": {
+            "type": "string",
+            "allowedValues": [
+                "Enabled",
+                "Disabled"
+            ]
+        },
+        "managedVirtualNetwork": {
+            "type": "string",
+            "allowedValues": [
+                "default",
+                ""
+            ]
+        },
+        "storageSubscriptionID": {
+            "type": "string",
+            "defaultValue": "[subscription().subscriptionId]"
+        },
+        "storageResourceGroupName": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "storageRoleUniqueId": {
+            "type": "string",
+            "defaultValue": "[newGuid()]"
+        },
+        "adlaResourceId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "storageAccessTier": {
+            "type": "string"
+        },
+        "storageAccountType": {
+            "type": "string"
+        },
+        "storageSupportsHttpsTrafficOnly": {
+            "type": "bool"
+        },
+        "storageKind": {
+            "type": "string"
+        },
+        "storageIsHnsEnabled": {
+            "type": "bool"
+        },
+        "userObjectId": {
+            "type": "string"
+        }
     },
     "variables": {
         "batch1": {
@@ -571,7 +639,23 @@
                 "deploymentlocation": {"value": "[parameters('Region')]"},
                 "workspacename": {"value": "[parameters('dbworkspaceName')]"},
                 "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"},
-                "LogAnalyticsWorkspaceName": {"value": "[parameters('LogAnalyticsWorkspaceName')]"}
+                "LogAnalyticsWorkspaceName": {"value": "[parameters('LogAnalyticsWorkspaceName')]"},
+                "synapsename": {"value": "[parameters('synapsename')]"},
+                "defaultDataLakeStorageAccountName": {"value": "[parameters('defaultDataLakeStorageAccountName')]"},
+                "defaultDataLakeStorageFilesystemName": {"value": "[parameters('defaultDataLakeStorageFilesystemName')]"},
+                "sqlAdministratorLogin": {"value": "[parameters('sqlAdministratorLogin')]"},
+                "sqlAdministratorLoginPassword": {"value": "[parameters('sqlAdministratorLoginPassword')]"},
+                "allowAllConnections": {"value": "[parameters('allowAllConnections')]"},
+                "grantWorkspaceIdentityControlForSql": {"value": "[parameters('grantWorkspaceIdentityControlForSql')]"},
+                "managedVirtualNetwork": {"value": "[parameters('managedVirtualNetwork')]"},
+                "adlaResourceId": {"value": "[parameters('adlaResourceId')]"},
+                "storageAccessTier": {"value": "[parameters('storageAccessTier')]"},
+                "storageAccountType": {"value": "[parameters('storageAccountType')]"},
+                "storageSupportsHttpsTrafficOnly": {"value": "[parameters('storageSupportsHttpsTrafficOnly')]"},
+                "storageKind": {"value": "[parameters('storageKind')]"},
+                "storageIsHnsEnabled": {"value": "[parameters('storageIsHnsEnabled')]"},
+                "userObjectId": {"value": "[parameters('userObjectId')]"}
+
               }
             },
             "dependsOn": [
