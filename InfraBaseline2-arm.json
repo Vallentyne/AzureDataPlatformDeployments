@@ -165,6 +165,7 @@
         },
         "GrantWorkspaceIdentityControlForSql": {
             "type": "string",
+            "defaultValue": "Enabled",
             "allowedValues": [
                 "Enabled",
                 "Disabled"
@@ -194,16 +195,19 @@
             "defaultValue": ""
         },
         "storageAccessTier": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "hot"
         },
         "storageAccountType": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Standard_RAGRS"
         },
         "storageSupportsHttpsTrafficOnly": {
             "type": "bool"
         },
         "storageKind": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "Storagev2"
         },
         "storageIsHnsEnabled": {
             "type": "bool"
