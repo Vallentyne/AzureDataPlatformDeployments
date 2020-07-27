@@ -15,96 +15,96 @@
                 "description": "Assign a name for the Log Analytic Workspace Name"
             }
         },
-        "virtualnetworkname": {
+        "VirtualNetworkName": {
             "type": "string",
             "defaultValue": "vnet1"
         },
-        "vnetAddressPrefix": {
+        "VnetAddressPrefix": {
             "type": "string",
             "defaultValue": "10.0.0.0/16",
             "metadata": {
               "description": "VNet Address namespace prefix"
             }
       },
-        "subnet1Prefix": {
+        "Subnet1Prefix": {
           "type": "string",
           "defaultValue": "10.0.0.0/24",
           "metadata": {
             "description": "Subnet 1 Prefix"
           }
       },
-        "subnet1Name": {
+        "Subnet1Name": {
           "type": "string",
           "defaultValue": "Subnet1",
           "metadata": {
             "description": "Subnet 1 Name"
           }
       },
-        "subnet2Prefix": {
+        "Subnet2Prefix": {
           "type": "string",
           "defaultValue": "10.0.1.0/24",
           "metadata": {
             "description": "Subnet 2 Prefix"
           }
       },
-        "subnet2Name": {
+        "Subnet2Name": {
           "type": "string",
           "defaultValue": "AzureBastionSubnet",
           "metadata": {
             "description": "Subnet 2 Name"
           }
       },
-        "subnet3Prefix": {
+        "Subnet3Prefix": {
           "type": "string",
           "defaultValue": "10.0.2.0/24",
           "metadata": {
             "description": "Subnet 3 Prefix"
           }
       },
-        "subnet3Name": {
+        "Subnet3Name": {
           "type": "string",
           "defaultValue": "DBpublic-subnet",
           "metadata": {
             "description": "Subnet 3 Name"
           }
       },
-        "subnet4Prefix": {
+        "Subnet4Prefix": {
           "type": "string",
           "defaultValue": "10.0.3.0/24",
           "metadata": {
             "description": "Subnet 4 Prefix"
           }
       },
-        "subnet4Name": {
+        "Subnet4Name": {
           "type": "string",
           "defaultValue": "DBprivate-subnet",
           "metadata": {
             "description": "Subnet 4 Name"
           }
       },
-      "vmname": {
+      "VmName": {
         "type": "string",
         "defaultvalue": "vm1"
       },
-      "VMadminpassword": {
+      "VmAdminPassword": {
         "type": "securestring",
         "metadata": {
             "description": "VM admin account password"
           }
       },
-      "imageoffer": {
+      "ImageOffer": {
         "type": "string",
         "defaultValue": "WindowsServer"
       },
-      "bastion-ip-name": {
+      "Bastion-Ip-Name": {
         "type": "string",
         "defaultValue": "AzureBastionIP"
       },
-      "bastion-host-name": {
+      "Bastion-Host-Name": {
         "type": "string",
         "defaultValue": "Bastion"
       },
-      "storageAccountName": {
+      "StorageAccountName": {
         "type":"string",
         "maxLength": 24,
         "minLength": 3,
@@ -112,13 +112,13 @@
             "description": "Storage account for storing BCP output CSV files"
         }
       },
-      "DBworkspaceName": {
+      "DbWorkspaceName": {
           "type": "string",
           "metadata": {
               "description": "The name of the Azure Databricks workspace to create."
           }
       },
-      "pricingTier": {
+      "PricingTier": {
         "type": "string",
         "defaultValue": "premium",
         "allowedValues": [
@@ -129,41 +129,41 @@
             "description": "The pricing tier of Databricks workspace."
         }
       },
-      "customPublicSubnetName": {
+      "CustomPublicSubnetName": {
         "type": "string",
         "defaultValue": "DBpublic-subnet",
         "metadata": {
             "description": "The name of the public subnet in the custom VNet."
         }
       },
-      "customPrivateSubnetName": {
+      "CustomPrivateSubnetName": {
         "type": "string",
         "defaultValue": "DBprivate-subnet",
         "metadata": {
             "description": "The name of the private subnet in the custom VNet."
         }
       },
-      "synapsename": {
+      "SynapseName": {
             "type": "string"
         },
-        "defaultDataLakeStorageAccountName": {
+        "DefaultDataLakeStorageAccountName": {
             "type": "string"
         },
-        "defaultDataLakeStorageFilesystemName": {
+        "DefaultDataLakeStorageFilesystemName": {
             "type": "string"
         },
-        "sqlAdministratorLogin": {
+        "SqlAdministratorLogin": {
             "type": "string"
         },
-        "sqlAdministratorLoginPassword": {
+        "SqlAdministratorLoginPassword": {
             "type": "secureString",
             "defaultValue": ""
         },
-        "allowAllConnections": {
+        "AllowAllConnections": {
             "type": "bool",
             "defaultValue": true
         },
-        "grantWorkspaceIdentityControlForSql": {
+        "GrantWorkspaceIdentityControlForSql": {
             "type": "string",
             "allowedValues": [
                 "Enabled",
