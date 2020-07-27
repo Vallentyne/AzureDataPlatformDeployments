@@ -231,7 +231,7 @@
                         "enabled": true
                     },
                     {
-                        "category": "sqlpermissions",
+                        "category": "sqlPermissions",
                         "enabled": true
                     },
                     {
