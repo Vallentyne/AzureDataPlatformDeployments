@@ -20,6 +20,33 @@ These controls are also expressed as part of the [Canadian Federal PBMM Azure Bl
 
 ## Deploy the Environment
 
-This includes a Log Analytics Workspace, virtual network, VM for data work, Bastion and other components needed for compliance.
+This includes the following resources:
+
+- a Log Analytics Workspace,
+- virtual network,
+- VM for data work,
+- Bastion and other components needed for compliance
+
+Data Platform specific resources include:
+
+- Azure Databricks
+- SQL Server
+- Analysis Server
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmain%2FInfrabaseline-arm.json)
+
+## Deploy the Environment - v2
+
+This includes the following resources:
+
+- a Log Analytics Workspace,
+- virtual network,
+- VM for data work,
+- Bastion and other components needed for compliance
+
+Data Platform specific resources include:
+
+- Azure Synapse
+- Azure Databricks
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmain%2FInfraBaseline2-arm.json)
