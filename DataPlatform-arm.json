@@ -302,7 +302,6 @@
             "subscriptionId": "[parameters('storageSubscriptionID')]",
             "resourceGroup": "[parameters('storageResourceGroupName')]",
             "dependsOn": [
-                "[concat('Microsoft.Synapse/workspaces/', parameters('synapsename'))]"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -372,6 +371,9 @@
             "type": "Microsoft.Resources/deployments",
             "subscriptionId": "[parameters('storageSubscriptionID')]",
             "resourceGroup": "[parameters('storageResourceGroupName')]",
+            "dependsOn": [
+                        "[concat('Microsoft.Storage/storageAccounts/', parameters('defaultDataLakeStorageAccountName'))]"
+                    ],
             "properties": {
                 "mode": "Incremental",
                 "template": {
