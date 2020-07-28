@@ -203,14 +203,16 @@
             "defaultValue": "Standard_RAGRS"
         },
         "storageSupportsHttpsTrafficOnly": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": true
         },
         "storageKind": {
             "type": "string",
             "defaultValue": "Storagev2"
         },
         "storageIsHnsEnabled": {
-            "type": "bool"
+            "type": "bool",
+            "defaultValue": true
         },
         "userObjectId": {
             "type": "string"
@@ -458,7 +460,8 @@
                    "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
-              "windowsVM1-NIC"
+              "windowsVM1-NIC",
+              "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
           },
         {
@@ -576,7 +579,8 @@
               "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
-              "[parameters('bastion-ip-name')]"
+              "[parameters('bastion-ip-name')]",
+              "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
           },
           {
@@ -625,7 +629,8 @@
               "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
-              "[parameters('bastion-host-name')]"
+              "[parameters('bastion-host-name')]",
+              "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
           },
           {
