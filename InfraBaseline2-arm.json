@@ -486,10 +486,10 @@
             },
             "storageProfile": {
               "imageReference": {
-                "publisher": "MicrosoftWindowsServer",
-                "offer": "WindowsServer",
-                "sku": "2016-Datacenter",
-                "version": "latest"
+                  "publisher": "microsoft-dsvm",
+                  "offer": "dsvm-win-2019",
+                  "sku": "server-2019",
+                  "version": "latest"
               },
               "osDisk": {
                 "name": "windowsVM1OSDisk",
