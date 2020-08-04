@@ -123,9 +123,9 @@
         "storageIsHnsEnabled": {
             "type": "bool"
         },
-        "userObjectId": {
+        "DataFactoryName": {
             "type": "string"
-        }
+        }    
     },
     "variables": {
         "managedResourceGroupId": "[concat(subscription().id, '/resourceGroups/', variables('managedResourceGroupName'))]",
@@ -321,16 +321,6 @@
                                 "principalId": "[reference(concat('Microsoft.Synapse/workspaces/', parameters('synapsename')), '2019-06-01-preview', 'Full').identity.principalId]",
                                 "principalType": "ServicePrincipal"
                             }
-                        },
-                        {
-                            "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
-                            "apiVersion": "2018-09-01-preview",
-                            "name": "[concat(parameters('defaultDataLakeStorageAccountName'), '/Microsoft.Authorization/',  guid(concat(resourceGroup().id, '/', variables('storageBlobDataContributorRoleID'), '/', parameters('userObjectId'), '/', parameters('storageRoleUniqueId'))))]",
-                            "properties": {
-                                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('storageBlobDataContributorRoleID'))]",
-                                "principalId": "[parameters('userObjectId')]",
-                                "principalType": "User"
-                            }
                         }
                     ]
                 }
@@ -393,6 +383,16 @@
                     ]
                 }
             }
+        },
+        {
+            "apiVersion": "2018-06-01",
+            "name": "[parameters('DataFactoryName')]",
+            "location": "[parameters('deploymentlocation')]",
+            "type": "Microsoft.DataFactory/factories",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {}
         }
     ],
     "outputs": {}

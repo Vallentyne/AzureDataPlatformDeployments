@@ -214,7 +214,7 @@
             "type": "bool",
             "defaultValue": true
         },
-        "userObjectId": {
+        "DataFactoryName": {
             "type": "string"
         }
     },
@@ -663,7 +663,7 @@
                 "storageSupportsHttpsTrafficOnly": {"value": "[parameters('storageSupportsHttpsTrafficOnly')]"},
                 "storageKind": {"value": "[parameters('storageKind')]"},
                 "storageIsHnsEnabled": {"value": "[parameters('storageIsHnsEnabled')]"},
-                "userObjectId": {"value": "[parameters('userObjectId')]"}
+                "DataFactoryName": {"value": "[parameters('DataFactoryName')]"}
 
               }
             },
