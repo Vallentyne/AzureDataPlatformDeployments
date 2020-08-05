@@ -2,7 +2,9 @@
 
 ## Data Proof of Concept Environments
 
-These resources assist in accelerating Azure Data projects.
+These resources assist in accelerating Azure Data projects.  The general solution resembles the following:
+
+![Solution Design](solution.png)
 
 ## Security Considerations
 
