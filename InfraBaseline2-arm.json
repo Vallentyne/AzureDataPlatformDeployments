@@ -216,6 +216,9 @@
         },
         "DataFactoryName": {
             "type": "string"
+        },
+        "KeyVaultName": {
+          "type": "string"
         }
     },
     "variables": {
@@ -477,7 +480,7 @@
           },
           "properties": {
             "hardwareProfile": {
-              "vmSize": "Standard_B2ms"
+              "vmSize": "Standard_D4s_v3"
             },
             "osProfile": {
               "computerName": "[parameters('vmname')]",
@@ -632,6 +635,16 @@
               "[parameters('bastion-host-name')]",
               "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
+          },
+          {
+          "type": "Microsoft.KeyVault/vaults",
+          "apiVersion": "2016-10-01",
+          "name": "[parameters('KeyVaultName')]",
+          "location": "[parameters('Region')]",
+          "properties": {
+            "sku": "standard"
+          }
+          
           },
           {
             "type": "Microsoft.Resources/deployments",
