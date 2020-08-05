@@ -124,7 +124,7 @@
         "allowedValues": [
             "standard",
             "premium"
-        ],
+          ],
         "metadata": {
             "description": "The pricing tier of Databricks workspace."
         }
@@ -153,7 +153,8 @@
             "type": "string"
         },
         "SqlAdministratorLogin": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "SQLadminperson"
         },
         "SqlAdministratorLoginPassword": {
             "type": "secureString",
@@ -174,9 +175,9 @@
         "managedVirtualNetwork": {
             "type": "string",
             "allowedValues": [
-                "default",
-                ""
-            ]
+                "default"
+            ],
+            "defaultValue": "default"
         },
         "storageSubscriptionID": {
             "type": "string",
@@ -532,159 +533,166 @@
                 }
               ]
         },
-          {
-            "apiVersion": "2019-02-01",
-            "type": "Microsoft.Network/publicIpAddresses",
-            "name": "[parameters('bastion-ip-name')]",
-            "location": "[parameters('region')]",
-            "sku": {
-                "name": "Standard"
-              },
-            "properties": {
-                "publicIPAllocationMethod": "Static"
-              }
-          },
-          {
-            "type": "Microsoft.Network/publicIPAddresses/providers/diagnosticSettings",
-            "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
-            "apiVersion": "2017-05-01-preview",
-            "properties": {
-              "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
-              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
-              "logs": [
-                {
-                  "category": "DDoSProtectionNotifications",
-                  "enabled": true,
-                  "retentionPolicy": {
-                    "days": 0,
-                    "enabled": false
-                  }
-                },
-                {
-                  "category": "DDoSMitigationReports",
-                  "enabled": true,
-                  "retentionPolicy": {
-                    "days": 0,
-                    "enabled": false
-                  }
-                }
-              ],
-              "metrics": [
-                {
-                  "category": "AllMetrics",
-                  "enabled": true,
-                  "retentionPolicy": {
-                    "days": 0,
-                    "enabled": false
-                  }
-                }
-              ],
-              "logAnalyticsDestinationType": "Dedicated"
+        {
+          "apiVersion": "2019-02-01",
+          "type": "Microsoft.Network/publicIpAddresses",
+          "name": "[parameters('bastion-ip-name')]",
+          "location": "[parameters('region')]",
+          "sku": {
+              "name": "Standard"
             },
-            "dependsOn": [
-              "[parameters('bastion-ip-name')]",
-              "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
-            ]
-          },
-          {
-            "apiVersion": "2020-04-01",
-            "type": "Microsoft.Network/bastionHosts",
-            "name": "[parameters('bastion-host-name')]",
-            "location": "[parameters('region')]",
-            "dependsOn": [
-                "[parameters('bastion-ip-name')]",
-                "[parameters('virtualnetworkname')]"
-              ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                      "name": "IpConf",
-                      "properties": {
-                          "subnet": {
-                              "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworkname'), parameters('subnet2Name'))]"
-                          },
-                          "publicIPAddress": {
-                              "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('bastion-ip-name'))]"
-                          }
-                      }
-                    }
-                ]
+          "properties": {
+              "publicIPAllocationMethod": "Static"
             }
-          },
-          {
-            "type": "Microsoft.Network/bastionhosts/providers/diagnosticSettings",
-            "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
-            "apiVersion": "2017-05-01-preview",
-            "properties": {
-              "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
-              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
-              "logs": [
-                {
-                  "category": "BastionAuditLogs",
-                  "enabled": true,
-                  "retentionPolicy": {
-                    "days": 0,
-                    "enabled": false
-                  }
+        },
+        {
+          "type": "Microsoft.Network/publicIPAddresses/providers/diagnosticSettings",
+          "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+            "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+            "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
+            "logs": [
+              {
+                "category": "DDoSProtectionNotifications",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
                 }
-              ],
-              "metrics": [     ],
-              "logAnalyticsDestinationType": "Dedicated"
-            },
-            "dependsOn": [
-              "[parameters('bastion-host-name')]",
-              "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
-            ]
+              },
+              {
+                "category": "DDoSMitigationReports",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ],
+            "metrics": [
+              {
+                "category": "AllMetrics",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ],
+            "logAnalyticsDestinationType": "Dedicated"
           },
-          {
+          "dependsOn": [
+            "[parameters('bastion-ip-name')]",
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
+          ]
+        },
+        {
+          "apiVersion": "2020-04-01",
+          "type": "Microsoft.Network/bastionHosts",
+          "name": "[parameters('bastion-host-name')]",
+          "location": "[parameters('region')]",
+          "dependsOn": [
+              "[parameters('bastion-ip-name')]",
+              "[parameters('virtualnetworkname')]"
+            ],
+          "properties": {
+              "ipConfigurations": [
+                  {
+                    "name": "IpConf",
+                    "properties": {
+                        "subnet": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworkname'), parameters('subnet2Name'))]"
+                        },
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('bastion-ip-name'))]"
+                        }
+                    }
+                  }
+              ]
+          }
+        },
+        {
+          "type": "Microsoft.Network/bastionhosts/providers/diagnosticSettings",
+          "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+            "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+            "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
+            "logs": [
+              {
+                "category": "BastionAuditLogs",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ],
+            "metrics": [     ],
+            "logAnalyticsDestinationType": "Dedicated"
+          },
+          "dependsOn": [
+            "[parameters('bastion-host-name')]",
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
+          ]
+        },
+        {
             "type": "Microsoft.KeyVault/vaults",
-            "apiVersion": "2016-10-01",
-            "name": "[parameters('KeyVaultName')]",
+            "name": "[parameters('keyVaultName')]",
+            "apiVersion": "2018-02-14",
             "location": "[parameters('Region')]",
             "properties": {
-              "sku": "Standard",
-              "tenantId": "[subscription().tenantId]"
-            }
-          
-          },
-          {
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2019-10-01",
-            "name": "linkedTemplate",
-            "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                "uri":"https://raw.githubusercontent.com/Vallentyne/AzureDataPlatformDeployments/main/DataPlatform-arm.json",
-                "contentVersion":"1.0.0.0"
+              "tenantId": "[subscription().tenantId]",
+              "accessPolicies": [     ],
+              "sku": {
+                "name": "Standard",
+                "family": "A"
               },
-              "parameters": {
-                "storageaccountname": {"value": "[parameters('storageAccountName')]"},
-                "deploymentlocation": {"value": "[parameters('Region')]"},
-                "workspacename": {"value": "[parameters('dbworkspaceName')]"},
-                "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"},
-                "LogAnalyticsWorkspaceName": {"value": "[parameters('LogAnalyticsWorkspaceName')]"},
-                "synapsename": {"value": "[parameters('synapsename')]"},
-                "defaultDataLakeStorageAccountName": {"value": "[parameters('defaultDataLakeStorageAccountName')]"},
-                "defaultDataLakeStorageFilesystemName": {"value": "[parameters('defaultDataLakeStorageFilesystemName')]"},
-                "sqlAdministratorLogin": {"value": "[parameters('sqlAdministratorLogin')]"},
-                "sqlAdministratorLoginPassword": {"value": "[parameters('sqlAdministratorLoginPassword')]"},
-                "allowAllConnections": {"value": "[parameters('allowAllConnections')]"},
-                "grantWorkspaceIdentityControlForSql": {"value": "[parameters('grantWorkspaceIdentityControlForSql')]"},
-                "managedVirtualNetwork": {"value": "[parameters('managedVirtualNetwork')]"},
-                "adlaResourceId": {"value": "[parameters('adlaResourceId')]"},
-                "storageAccessTier": {"value": "[parameters('storageAccessTier')]"},
-                "storageAccountType": {"value": "[parameters('storageAccountType')]"},
-                "storageSupportsHttpsTrafficOnly": {"value": "[parameters('storageSupportsHttpsTrafficOnly')]"},
-                "storageKind": {"value": "[parameters('storageKind')]"},
-                "storageIsHnsEnabled": {"value": "[parameters('storageIsHnsEnabled')]"},
-                "DataFactoryName": {"value": "[parameters('DataFactoryName')]"}
-
+              "networkAcls": {
+                  "defaultAction": "Allow",
+                  "bypass": "AzureServices"
               }
+            }
+        },
+        {
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2019-10-01",
+          "name": "linkedTemplate",
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri":"https://raw.githubusercontent.com/Vallentyne/AzureDataPlatformDeployments/main/DataPlatform-arm.json",
+              "contentVersion":"1.0.0.0"
             },
-            "dependsOn": [
-              "[parameters('bastion-host-name')]"
-            ]
-          }
+            "parameters": {
+              "storageaccountname": {"value": "[parameters('storageAccountName')]"},
+              "deploymentlocation": {"value": "[parameters('Region')]"},
+              "workspacename": {"value": "[parameters('dbworkspaceName')]"},
+              "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"},
+              "LogAnalyticsWorkspaceName": {"value": "[parameters('LogAnalyticsWorkspaceName')]"},
+              "synapsename": {"value": "[parameters('synapsename')]"},
+              "defaultDataLakeStorageAccountName": {"value": "[parameters('defaultDataLakeStorageAccountName')]"},
+              "defaultDataLakeStorageFilesystemName": {"value": "[parameters('defaultDataLakeStorageFilesystemName')]"},
+              "sqlAdministratorLogin": {"value": "[parameters('sqlAdministratorLogin')]"},
+              "sqlAdministratorLoginPassword": {"value": "[parameters('sqlAdministratorLoginPassword')]"},
+              "allowAllConnections": {"value": "[parameters('allowAllConnections')]"},
+              "grantWorkspaceIdentityControlForSql": {"value": "[parameters('grantWorkspaceIdentityControlForSql')]"},
+              "managedVirtualNetwork": {"value": "[parameters('managedVirtualNetwork')]"},
+              "adlaResourceId": {"value": "[parameters('adlaResourceId')]"},
+              "storageAccessTier": {"value": "[parameters('storageAccessTier')]"},
+              "storageAccountType": {"value": "[parameters('storageAccountType')]"},
+              "storageSupportsHttpsTrafficOnly": {"value": "[parameters('storageSupportsHttpsTrafficOnly')]"},
+              "storageKind": {"value": "[parameters('storageKind')]"},
+              "storageIsHnsEnabled": {"value": "[parameters('storageIsHnsEnabled')]"},
+              "DataFactoryName": {"value": "[parameters('DataFactoryName')]"}
+
+            }
+          },
+          "dependsOn": [
+            "[parameters('bastion-host-name')]"
+          ]
+        }
     ],
     "outputs": {}
 }
