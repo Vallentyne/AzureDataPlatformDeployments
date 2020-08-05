@@ -105,32 +105,23 @@
           "type": "string",
           "defaultValue": "Bastion"
       },
-        "StorageAccountName": {
-          "type":"string",
-          "maxLength": 24,
-          "minLength": 3,
-          "defaultValue": "storxxxxxxasdf",
-          "metadata": {
-                  "description": "Must use lowercase letters and numbers, 3-24 char"
+        "DbWorkspaceName": {
+            "type": "string",
+            "defaultValue": "databricksxxxxxx",
+            "metadata": {
+                  "description": "The name of the Azure Databricks workspace to create. Name can use alphanumerics, hyphens and underscores.  3-30 char"
               }
       },
-      "DbWorkspaceName": {
+        "PricingTier": {
           "type": "string",
-          "defaultValue": "databricksxxxxxx",
+          "defaultValue": "premium",
+          "allowedValues": [
+              "standard",
+              "premium"
+            ],
           "metadata": {
-                "description": "The name of the Azure Databricks workspace to create. Name can use alphanumerics, hyphens and underscores.  3-30 char"
-            }
-      },
-      "PricingTier": {
-        "type": "string",
-        "defaultValue": "premium",
-        "allowedValues": [
-            "standard",
-            "premium"
-          ],
-        "metadata": {
-            "description": "The pricing tier of Databricks workspace."
-        }
+              "description": "The pricing tier of Databricks workspace."
+          }
       },
       "CustomPublicSubnetName": {
         "type": "string",
@@ -228,12 +219,14 @@
         },
         "DataFactoryName": {
             "type": "string",
+            "defaultValue": "datafactxxxxxxxx",
             "metadata": {
                   "description": "Must use letters, hyphens and numbers, 3-63 char"
               }
         },
         "KeyVaultName": {
           "type": "string",
+          "defaultValue": "keyvaultxxxxxxxx",
           "metadata": {
                   "description": "Must use letters, hyphens and numbers, 3-24 char, start with a letter, no consecutive hyphens"
               }
@@ -683,7 +676,6 @@
               "contentVersion":"1.0.0.0"
             },
             "parameters": {
-              "storageaccountname": {"value": "[parameters('storageAccountName')]"},
               "deploymentlocation": {"value": "[parameters('Region')]"},
               "workspacename": {"value": "[parameters('dbworkspaceName')]"},
               "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"},
