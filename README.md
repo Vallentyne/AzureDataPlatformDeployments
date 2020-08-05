@@ -52,3 +52,9 @@ Data Platform specific resources include:
 - Azure Databricks
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmain%2FInfraBaseline2-arm.json)
+
+## Known Areas to Watch For
+
+- Ensure the subscription has room for quota for these resources.
+- Azure Synapse is not yet available in Canadian Data Centers, and so PBMM region controls aren't possible for the v2 deployment yet.  (as of Aug 5, 2020)
+- Different Azure resources have specific naming rules, be ready to know what they are for this set of resources.

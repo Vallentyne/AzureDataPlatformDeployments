@@ -11,8 +11,9 @@
         },
         "LogAnalyticsWorkspaceName": {
             "type": "string",
+            "defaultValue": "lawwsxxxxxxasdf",
             "metadata": {
-                "description": "Assign a name for the Log Analytic Workspace Name"
+                "description": "The workspace name can contain only letters, numbers and '-'. The '-' shouldn't be the first or the last symbol."
             }
         },
         "VirtualNetworkName": {
@@ -82,41 +83,43 @@
             "description": "Subnet 4 Name"
           }
       },
-      "VmName": {
-        "type": "string",
-        "defaultvalue": "vm1"
+        "VmName": {
+          "type": "string",
+          "defaultValue": "vm1"
       },
-      "VmAdminPassword": {
-        "type": "securestring",
-        "metadata": {
-            "description": "VM admin account password"
-          }
+        "VmAdminPassword": {
+          "type": "securestring",
+          "metadata": {
+              "description": "VM admin account password"
+            }
       },
-      "ImageOffer": {
-        "type": "string",
-        "defaultValue": "WindowsServer"
+        "ImageOffer": {
+          "type": "string",
+          "defaultValue": "WindowsServer"
       },
-      "Bastion-Ip-Name": {
-        "type": "string",
-        "defaultValue": "AzureBastionIP"
+        "Bastion-Ip-Name": {
+          "type": "string",
+          "defaultValue": "AzureBastionIP"
       },
-      "Bastion-Host-Name": {
-        "type": "string",
-        "defaultValue": "Bastion"
+        "Bastion-Host-Name": {
+          "type": "string",
+          "defaultValue": "Bastion"
       },
-      "StorageAccountName": {
-        "type":"string",
-        "maxLength": 24,
-        "minLength": 3,
-        "metadata": {
-            "description": "Storage account for storing BCP output CSV files"
-        }
+        "StorageAccountName": {
+          "type":"string",
+          "maxLength": 24,
+          "minLength": 3,
+          "defaultValue": "storxxxxxxasdf",
+          "metadata": {
+                  "description": "Must use lowercase letters and numbers, 3-24 char"
+              }
       },
       "DbWorkspaceName": {
           "type": "string",
+          "defaultValue": "databricksxxxxxx",
           "metadata": {
-              "description": "The name of the Azure Databricks workspace to create."
-          }
+                "description": "The name of the Azure Databricks workspace to create. Name can use alphanumerics, hyphens and underscores.  3-30 char"
+            }
       },
       "PricingTier": {
         "type": "string",
@@ -144,10 +147,18 @@
         }
       },
       "SynapseName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "datasynapsexxxxxx",
+            "metadata": {
+                "description": "Workspace name must contain only lowercase letters or numbers, must end with a letter or a number, must be at most 45 characters long, and must not end with the string 'ondemand'."
+            }
         },
         "DefaultDataLakeStorageAccountName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "adlsdatastorxxxxxxx",
+            "metadata": {
+                "description": "Lowercase numbers or letters, 3-24 char."
+            }
         },
         "DefaultDataLakeStorageFilesystemName": {
             "type": "string"
@@ -216,10 +227,16 @@
             "defaultValue": true
         },
         "DataFactoryName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                  "description": "Must use letters, hyphens and numbers, 3-63 char"
+              }
         },
         "KeyVaultName": {
-          "type": "string"
+          "type": "string",
+          "metadata": {
+                  "description": "Must use letters, hyphens and numbers, 3-24 char, start with a letter, no consecutive hyphens"
+              }
         }
     },
     "variables": {
@@ -312,7 +329,7 @@
                   ],
                   "metrics": [          ]
                         }
-                },
+        },
         {
           "apiVersion": "2018-10-01",
           "type": "Microsoft.Network/virtualNetworks",
@@ -467,7 +484,7 @@
               "windowsVM1-NIC",
               "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
-          },
+        },
         {
           "name": "[parameters('vmname')]",
           "type": "Microsoft.Compute/virtualMachines",

@@ -6,8 +6,9 @@
             "type":"string",
             "maxLength": 24,
             "minLength": 3,
+            "defaultValue": "storxxxxxxasdf",
             "metadata": {
-                "description": "Storage account for storing BCP output CSV files"
+                "description": "Must use lowercase letters and numbers, 3-24 char"
             }
         },
         "deploymentlocation": {
@@ -18,12 +19,16 @@
             }
         },
         "LogAnalyticsWorkspaceName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": "lawwsxxxxxxasdf",
+            "metadata": {
+                "description": "The workspace name can contain only letters, numbers and '-'. The '-' shouldn't be the first or the last symbol."
+            }
         },
         "workspaceName": {
             "type": "string",
             "metadata": {
-                "description": "The name of the Azure Databricks workspace to create."
+                "description": "The name of the Azure Databricks workspace to create. Name can use alphanumerics, hyphens and underscores.  3-30 char"
             }
         },
         "pricingTier": {
@@ -58,11 +63,18 @@
                 "description": "The name of the private subnet in the custom VNet."
             }
         },
-        "synapsename": {
-            "type": "string"
+        "SynapseName": {
+            "type": "string",
+            "defaultValue": "datasynapsexxxxxx",
+            "metadata": {
+                "description": "Workspace name must contain only lowercase letters or numbers, must end with a letter or a number, must be at most 45 characters long, and must not end with the string 'ondemand'."
+            }
         },
         "defaultDataLakeStorageAccountName": {
-            "type": "string"
+            "type": "string",
+            "metadata": {
+                "description": "Lowercase numbers or letters, 3-24 char."
+            }
         },
         "defaultDataLakeStorageFilesystemName": {
             "type": "string"
