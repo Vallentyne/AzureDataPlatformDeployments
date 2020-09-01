@@ -12,7 +12,7 @@ Security accreditation of environments that include these Azure resources is a k
 
 | PBMM Control Name | Description |
 | --- | ---------- |
-|Location of Assets | All resources are created in Canada East |
+|Location of Assets | All resources are created in Canada Central |
 |AU-3 (2), AU-6 (4), AU-12 Auditing and Logging requirements | All deployed resources send logs to a Log Analytics workspace|
 |SC-7 Boundary Protection| Azure Bastion is used to protect deployed VM <br> Public endpoints are minimized where possible|
 |SC-28 (1) Protection of Information at Rest|Encryption of data at rest is deployed by default|
