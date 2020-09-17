@@ -694,7 +694,9 @@
               "storageSupportsHttpsTrafficOnly": {"value": "[parameters('storageSupportsHttpsTrafficOnly')]"},
               "storageKind": {"value": "[parameters('storageKind')]"},
               "storageIsHnsEnabled": {"value": "[parameters('storageIsHnsEnabled')]"},
-              "DataFactoryName": {"value": "[parameters('DataFactoryName')]"}
+              "DataFactoryName": {"value": "[parameters('DataFactoryName')]"},
+              "custompublicsubnetname": {"value": "[parameters('CustomPublicSubnetName')]"},
+              "customprivatesubnetname": {"value": "[parameters('CustomPrivateSubnetName')]"}
 
             }
           },
