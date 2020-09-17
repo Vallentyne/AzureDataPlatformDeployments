@@ -65,31 +65,6 @@
         "defaultDataLakeStorageFilesystemName": {
             "type": "string"
         },
-        "sqlAdministratorLogin": {
-            "type": "string"
-        },
-        "sqlAdministratorLoginPassword": {
-            "type": "secureString",
-            "defaultValue": ""
-        },
-        "allowAllConnections": {
-            "type": "bool",
-            "defaultValue": true
-        },
-        "grantWorkspaceIdentityControlForSql": {
-            "type": "string",
-            "allowedValues": [
-                "Enabled",
-                "Disabled"
-            ]
-        },
-        "managedVirtualNetwork": {
-            "type": "string",
-            "allowedValues": [
-                "default",
-                ""
-            ]
-        },
         "storageSubscriptionID": {
             "type": "string",
             "defaultValue": "[subscription().subscriptionId]"
@@ -207,58 +182,6 @@
                     ],
                     "metrics": [          ]
                             }
-        },
-        {
-            "apiVersion": "2019-06-01-preview",
-            "name": "[parameters('synapsename')]",
-            "location": "[parameters('deploymentlocation')]",
-            "type": "Microsoft.Synapse/workspaces",
-            "identity": {
-                "type": "SystemAssigned"
-            },
-            "properties": {
-                "defaultDataLakeStorage": {
-                    "accountUrl": "[variables('defaultDataLakeStorageAccountUrl')]",
-                    "filesystem": "[parameters('defaultDataLakeStorageFilesystemName')]"
-                },
-                "sqlAdministratorLogin": "[parameters('sqlAdministratorLogin')]",
-                "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
-                "managedVirtualNetwork": "[parameters('managedVirtualNetwork')]"
-            },
-            "resources": [
-                {
-                    "condition": "[parameters('allowAllConnections')]",
-                    "apiVersion": "2019-06-01-preview",
-                    "dependsOn": [
-                        "[concat('Microsoft.Synapse/workspaces/', parameters('synapsename'))]"
-                    ],
-                    "location": "[parameters('deploymentlocation')]",
-                    "name": "allowAll",
-                    "properties": {
-                        "startIpAddress": "0.0.0.0",
-                        "endIpAddress": "255.255.255.255"
-                    },
-                    "type": "firewallrules"
-                },
-                {
-                    "apiVersion": "2019-06-01-preview",
-                    "dependsOn": [
-                        "[concat('Microsoft.Synapse/workspaces/', parameters('synapsename'))]"
-                    ],
-                    "location": "[parameters('deploymentlocation')]",
-                    "name": "default",
-                    "properties": {
-                        "grantSqlControlToManagedIdentity": {
-                            "desiredState": "[parameters('grantWorkspaceIdentityControlForSql')]"
-                        }
-                    },
-                    "type": "managedIdentitySqlControlSettings"
-                }
-            ],
-            "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/', parameters('defaultDataLakeStorageAccountName'))]",
-                "[concat('Microsoft.Resources/deployments/', parameters('defaultDataLakeStorageFilesystemName'))]"
-            ]
         },
         {
             "apiVersion": "2019-05-01",
