@@ -472,7 +472,7 @@
                    "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
-              "[concat(variables('vmnicname')]",
+              "[concat(variables('vmnicname'))]",
               "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
         },
