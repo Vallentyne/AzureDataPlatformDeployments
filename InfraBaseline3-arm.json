@@ -139,7 +139,7 @@
       },
       "SynapseName": {
             "type": "string",
-            "defaultValue": "GaScCPS-BITK-syn",
+            "defaultValue": "gasccps-bitk-syn",
             "metadata": {
                 "description": "Workspace name must contain only lowercase letters or numbers, must end with a letter or a number, must be at most 45 characters long, and must not end with the string 'ondemand'."
             }
@@ -216,7 +216,7 @@
         },
         "DataFactoryName": {
             "type": "string",
-            "defaultValue": "GaScCPS-BITK–adf",
+            "defaultValue": "gasccps-bitk-adf",
             "metadata": {
                   "description": "Must use letters, hyphens and numbers, 3-63 char"
               }
@@ -238,7 +238,8 @@
                 }
             ]
         },
-        "firstnsgname": "GaScCPS-BITK-dbw-nsg"
+        "firstnsgname": "GaScCPS-BITK-dbw-nsg",
+        "vmnicname": "[concat(parameters('VmName'),'-nic1')]"
     },
     "resources": [
         {
@@ -426,7 +427,7 @@
           }
         },
         {
-          "name": "windowsVM1-NIC",
+          "name": "[variables('VmnicName')]",
           "type": "Microsoft.Network/networkInterfaces",
           "apiVersion": "2019-11-01",
           "location": "[parameters('Region')]",
@@ -452,10 +453,10 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces/providers/diagnosticSettings",
-            "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+            "name": "[concat(variables('vmnicname'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
             "apiVersion": "2017-05-01-preview",
             "properties": {
-              "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+              "name": "[concat(parameters('VmName'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
               "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
               "logs": [       ],
               "metrics": [
@@ -471,7 +472,7 @@
                    "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
-              "windowsVM1-NIC",
+              "[concat(parameters('VmName'),'-nic1')]",
               "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
         },
@@ -503,7 +504,7 @@
                   "version": "latest"
               },
               "osDisk": {
-                "name": "windowsVM1OSDisk",
+                "name": "[concat(parameters('VmName'),'-osdisk')]",
                 "caching": "ReadWrite",
                 "createOption": "FromImage"
               }
@@ -511,7 +512,7 @@
             "networkProfile": {
               "networkInterfaces": [
                 {
-                  "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
+                  "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('vmnicname'))]"
                 }
                 ]
               }
