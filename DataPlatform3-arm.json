@@ -102,10 +102,6 @@
             "type": "string",
             "defaultValue": "[newGuid()]"
         },
-        "adlaResourceId": {
-            "type": "string",
-            "defaultValue": ""
-        },
         "storageAccessTier": {
             "type": "string"
         },
@@ -227,7 +223,6 @@
                 },
                 "sqlAdministratorLogin": "[parameters('sqlAdministratorLogin')]",
                 "sqlAdministratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
-                "adlaResourceId": "[parameters('adlaResourceId')]",
                 "managedVirtualNetwork": "[parameters('managedVirtualNetwork')]"
             },
             "resources": [

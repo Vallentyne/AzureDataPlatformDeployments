@@ -194,10 +194,6 @@
             "type": "string",
             "defaultValue": "[newGuid()]"
         },
-        "adlaResourceId": {
-            "type": "string",
-            "defaultValue": ""
-        },
         "storageAccessTier": {
             "type": "string",
             "defaultValue": "hot"
@@ -689,14 +685,14 @@
               "allowAllConnections": {"value": "[parameters('allowAllConnections')]"},
               "grantWorkspaceIdentityControlForSql": {"value": "[parameters('grantWorkspaceIdentityControlForSql')]"},
               "managedVirtualNetwork": {"value": "[parameters('managedVirtualNetwork')]"},
-              "adlaResourceId": {"value": "[parameters('adlaResourceId')]"},
               "storageAccessTier": {"value": "[parameters('storageAccessTier')]"},
               "storageAccountType": {"value": "[parameters('storageAccountType')]"},
               "storageSupportsHttpsTrafficOnly": {"value": "[parameters('storageSupportsHttpsTrafficOnly')]"},
               "storageKind": {"value": "[parameters('storageKind')]"},
               "storageIsHnsEnabled": {"value": "[parameters('storageIsHnsEnabled')]"},
-              "DataFactoryName": {"value": "[parameters('DataFactoryName')]"}
-
+              "DataFactoryName": {"value": "[parameters('DataFactoryName')]"},
+              "custompublicsubnetname": {"value": "[parameters('CustomPublicSubnetName')]"},
+              "customprivatesubnetname": {"value": "[parameters('CustomPrivateSubnetName')]"}
             }
           },
           "dependsOn": [
