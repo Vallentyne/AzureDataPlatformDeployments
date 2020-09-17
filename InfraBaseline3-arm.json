@@ -456,7 +456,7 @@
             "name": "[concat(variables('vmnicname'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
             "apiVersion": "2017-05-01-preview",
             "properties": {
-              "name": "[concat(parameters('VmName'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+              "name": "[concat(variables('vmnicname'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
               "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
               "logs": [       ],
               "metrics": [
@@ -472,7 +472,7 @@
                    "logAnalyticsDestinationType": "Dedicated"
             },
             "dependsOn": [
-              "[concat(parameters('VmName'),'-nic1')]",
+              "[concat(variables('vmnicname')]",
               "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
             ]
         },
@@ -482,7 +482,7 @@
           "apiVersion": "2019-07-01",
           "location": "[parameters('Region')]",
           "dependsOn": [
-            "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
+            "[resourceId('Microsoft.Network/networkInterfaces', variables('vmnicname'))]"
           ],
           "tags": {
             "displayName": "windowsVM1"
