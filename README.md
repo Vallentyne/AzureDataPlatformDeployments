@@ -53,6 +53,24 @@ Data Platform specific resources include:
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmain%2FInfraBaseline2-arm.json)
 
+## Deploy the Environment - v3
+
+This includes the following resources:
+
+- a Log Analytics Workspace,
+- virtual network,
+- VM for data work,
+- Bastion
+- Key Vault and other components needed for compliance
+
+Data Platform specific resources include:
+
+- Azure Data Factory
+- Azure Data Lake storage
+- Azure Databricks
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FVallentyne%2FAzureDataPlatformDeployments%2Fmain%2FInfraBaseline3-arm.json)
+
 ## Known Areas to Watch For
 
 - Ensure the subscription has room for quota for these resources.
