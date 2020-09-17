@@ -184,14 +184,6 @@
         }
     },
     "variables": {
-        "batch1": {
-            "solutions": [
-                {
-                    "name": "GaScCLDBITKlawsqla",
-                    "marketplaceName": "SQLAssessment"
-                }
-            ]
-        },
         "firstnsgname": "GaScCPS-BITK-dbw-nsg",
         "vmnicname": "[concat(parameters('VmName'),'-nic1')]"
     },
@@ -222,28 +214,6 @@
                     }
                 }
             ]
-        },
-        {
-            "apiVersion": "2015-11-01-preview",
-            "type": "Microsoft.OperationsManagement/solutions",
-            "name": "[concat(variables('batch1').solutions[copyIndex()].Name)]",
-            "location": "[parameters('Region')]",
-            "dependsOn": [
-                "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
-            ],
-            "copy": {
-                "name": "solutionCopy",
-                "count": "[length(variables('batch1').solutions)]"
-            },
-            "properties": {
-                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]"
-            },
-            "plan": {
-                "name": "[variables('batch1').solutions[copyIndex()].name]",
-                "product": "[concat('OMSGallery/', variables('batch1').solutions[copyIndex()].marketplaceName)]",
-                "promotionCode": "",
-                "publisher": "Microsoft"
-            }
         },
         {
           "apiVersion": "2019-06-01",
