@@ -1,0 +1,708 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Region": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Specify the region for your resources"
+            }
+        },
+        "LogAnalyticsWorkspaceName": {
+            "type": "string",
+            "defaultValue": "GaScCLD-BITK-law",
+            "metadata": {
+                "description": "The workspace name can contain only letters, numbers and '-'. The '-' shouldn't be the first or the last symbol."
+            }
+        },
+        "VirtualNetworkName": {
+            "type": "string",
+            "defaultValue": "GaScCNR-BITK-vnet"
+        },
+        "VnetAddressPrefix": {
+            "type": "string",
+            "defaultValue": "10.0.0.0/16",
+            "metadata": {
+              "description": "VNet Address namespace prefix"
+            }
+      },
+        "Subnet1Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.0.0/24",
+          "metadata": {
+            "description": "Subnet 1 Prefix"
+          }
+      },
+        "Subnet1Name": {
+          "type": "string",
+          "defaultValue": "GaScCNR-BITK-Int-snet",
+          "metadata": {
+            "description": "Subnet 1 Name"
+          }
+      },
+        "Subnet2Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.1.0/24",
+          "metadata": {
+            "description": "Subnet 2 Prefix"
+          }
+      },
+        "Subnet2Name": {
+          "type": "string",
+          "defaultValue": "AzureBastionSubnet",
+          "metadata": {
+            "description": "Subnet 2 Name"
+          }
+      },
+        "Subnet3Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.2.0/24",
+          "metadata": {
+            "description": "Subnet 3 Prefix"
+          }
+      },
+        "Subnet3Name": {
+          "type": "string",
+          "defaultValue": "GaScCNR-BITK-DBExt-snet",
+          "metadata": {
+            "description": "Subnet 3 Name"
+          }
+      },
+        "Subnet4Prefix": {
+          "type": "string",
+          "defaultValue": "10.0.3.0/24",
+          "metadata": {
+            "description": "Subnet 4 Prefix"
+          }
+      },
+        "Subnet4Name": {
+          "type": "string",
+          "defaultValue": "GaScCNR-BITK-DBInt-snet",
+          "metadata": {
+            "description": "Subnet 4 Name"
+          }
+      },
+        "VmName": {
+          "type": "string",
+          "defaultValue": "GaScSWE-BITK01"
+      },
+        "VmAdminPassword": {
+          "type": "securestring",
+          "metadata": {
+              "description": "VM admin account password"
+            }
+      },
+        "ImageOffer": {
+          "type": "string",
+          "defaultValue": "WindowsServer"
+      },
+        "Bastion-Ip-Name": {
+          "type": "string",
+          "defaultValue": "GaScCNR-BSTN01-pip1"
+      },
+        "Bastion-Host-Name": {
+          "type": "string",
+          "defaultValue": "GaScCNR-BSTN01"
+      },
+        "DbWorkspaceName": {
+            "type": "string",
+            "defaultValue": "GaScCPS-BITK-dbw",
+            "metadata": {
+                  "description": "The name of the Azure Databricks workspace to create. Name can use alphanumerics, hyphens and underscores.  3-30 char"
+              }
+      },
+        "PricingTier": {
+          "type": "string",
+          "defaultValue": "premium",
+          "allowedValues": [
+              "standard",
+              "premium"
+            ],
+          "metadata": {
+              "description": "The pricing tier of Databricks workspace."
+          }
+      },
+      "CustomPublicSubnetName": {
+        "type": "string",
+        "defaultValue": "GaScCNR-BITK-DBExt-snet",
+        "metadata": {
+            "description": "The name of the public subnet in the custom VNet."
+        }
+      },
+      "CustomPrivateSubnetName": {
+        "type": "string",
+        "defaultValue": "GaScCNR-BITK-DBInt-snet",
+        "metadata": {
+            "description": "The name of the private subnet in the custom VNet."
+        }
+      },
+      "SynapseName": {
+            "type": "string",
+            "defaultValue": "GaScCPS-BITK-syn",
+            "metadata": {
+                "description": "Workspace name must contain only lowercase letters or numbers, must end with a letter or a number, must be at most 45 characters long, and must not end with the string 'ondemand'."
+            }
+        },
+        "DefaultDataLakeStorageAccountName": {
+            "type": "string",
+            "defaultValue": "gcsccsabitk<your string>",
+            "metadata": {
+                "description": "Lowercase numbers or letters, 3-24 char."
+            }
+        },
+        "DefaultDataLakeStorageFilesystemName": {
+            "type": "string",
+            "defaultValue": "fs1"
+        },
+        "SqlAdministratorLogin": {
+            "type": "string",
+            "defaultValue": "SQLadminperson"
+        },
+        "SqlAdministratorLoginPassword": {
+            "type": "secureString",
+            "defaultValue": ""
+        },
+        "AllowAllConnections": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "GrantWorkspaceIdentityControlForSql": {
+            "type": "string",
+            "defaultValue": "Enabled",
+            "allowedValues": [
+                "Enabled",
+                "Disabled"
+            ]
+        },
+        "managedVirtualNetwork": {
+            "type": "string",
+            "allowedValues": [
+                "default"
+            ],
+            "defaultValue": "default"
+        },
+        "storageSubscriptionID": {
+            "type": "string",
+            "defaultValue": "[subscription().subscriptionId]"
+        },
+        "storageResourceGroupName": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().name]"
+        },
+        "storageRoleUniqueId": {
+            "type": "string",
+            "defaultValue": "[newGuid()]"
+        },
+        "adlaResourceId": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "storageAccessTier": {
+            "type": "string",
+            "defaultValue": "hot"
+        },
+        "storageAccountType": {
+            "type": "string",
+            "defaultValue": "Standard_RAGRS"
+        },
+        "storageSupportsHttpsTrafficOnly": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "storageKind": {
+            "type": "string",
+            "defaultValue": "Storagev2"
+        },
+        "storageIsHnsEnabled": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "DataFactoryName": {
+            "type": "string",
+            "defaultValue": "GaScCPS-BITK–adf",
+            "metadata": {
+                  "description": "Must use letters, hyphens and numbers, 3-63 char"
+              }
+        },
+        "KeyVaultName": {
+          "type": "string",
+          "defaultValue": "GaScCSV-BITK-kv",
+          "metadata": {
+                  "description": "Must use letters, hyphens and numbers, 3-24 char, start with a letter, no consecutive hyphens"
+              }
+        }
+    },
+    "variables": {
+        "batch1": {
+            "solutions": [
+                {
+                    "name": "GaScCLD-BITK-law-sqla",
+                    "marketplaceName": "SQLAssessment"
+                }
+            ]
+        },
+        "firstnsgname": "GaScCPS-BITK-dbw-nsg"
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-03-01-preview",
+            "location": "[parameters('Region')]",
+            "name": "[parameters('loganalyticsWorkspaceName')]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "comments": "Log Analytics workspace",
+            "properties": {
+                "sku": {
+                        "name": "pergb2018"
+                    },
+                "retentionInDays": 730
+            },
+            "resources": [
+                {
+                    "name": "AzureActivityLog",
+                    "type": "datasources",
+                    "apiVersion": "2015-11-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
+                    ],
+                    "kind": "AzureActivityLog",
+                    "properties": {
+                        "linkedResourceId": "[concat(subscription().id, '/providers/Microsoft.Insights/eventTypes/management')]"
+                    }
+                }
+            ]
+        },
+        {
+            "apiVersion": "2015-11-01-preview",
+            "type": "Microsoft.OperationsManagement/solutions",
+            "name": "[concat(variables('batch1').solutions[copyIndex()].Name)]",
+            "location": "[parameters('Region')]",
+            "dependsOn": [
+                "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
+            ],
+            "copy": {
+                "name": "solutionCopy",
+                "count": "[length(variables('batch1').solutions)]"
+            },
+            "properties": {
+                "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]"
+            },
+            "plan": {
+                "name": "[variables('batch1').solutions[copyIndex()].name]",
+                "product": "[concat('OMSGallery/', variables('batch1').solutions[copyIndex()].marketplaceName)]",
+                "promotionCode": "",
+                "publisher": "Microsoft"
+            }
+        },
+        {
+          "apiVersion": "2019-06-01",
+          "type": "Microsoft.Network/networkSecurityGroups",
+          "name": "[variables('firstNSGName')]",
+          "location": "[parameters('Region')]",
+          "dependsOn": []
+        },
+        {
+          "type": "Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings",
+          "name": "[concat(variables('firstNSGName'),'/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+          "dependsOn": [
+              "[variables('firstNSGName')]"
+                  ],
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+              "name": "[concat(variables('firstNSGName'),'/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
+              "logs": [ 
+                  {
+                  "category": "NetworkSecurityGroupEvent",
+                  "enabled": true
+                  },
+                  {
+                      "category": "NetworkSecurityGroupRuleCounter",
+                      "enabled": true
+                  }
+                  ],
+                  "metrics": [          ]
+                        }
+        },
+        {
+          "apiVersion": "2018-10-01",
+          "type": "Microsoft.Network/virtualNetworks",
+          "name": "[parameters('virtualnetworkName')]",
+          "location": "[parameters('region')]",
+          "dependsOn": [
+            "[variables('firstnsgname')]"
+            ],
+          "properties": {
+            "addressSpace": {
+              "addressPrefixes": [
+                "[parameters('vnetAddressPrefix')]"
+              ]
+            },
+          "subnets": [
+            {
+              "name": "[parameters('subnet1Name')]",
+              "properties": {
+                "addressPrefix": "[parameters('subnet1Prefix')]",
+                "serviceEndpoints": [
+                                  {
+                                      "service": "Microsoft.KeyVault",
+                                      "locations": [
+                                          "*"
+                                      ]
+                                  }
+                              ]              
+              }
+            },
+            {
+              "name": "[parameters('subnet2Name')]",
+              "properties": {
+                "addressPrefix": "[parameters('subnet2Prefix')]"            
+              }
+            },
+            {
+              "name": "[parameters('subnet3Name')]",
+              "properties": {
+                "addressPrefix": "[parameters('subnet3Prefix')]",
+                "networkSecurityGroup": {
+                "id": "[resourceid('Microsoft.Network/networkSecurityGroups', variables('firstnsgname'))]"
+                    },
+                 "delegations": [
+                {
+                  "name": "databricks-del-private",
+                  "properties": {
+                    "serviceName": "Microsoft.Databricks/workspaces"
+                  }
+                }
+              ]            
+              }
+            },
+            {
+              "name": "[parameters('subnet4Name')]",
+              "properties": {
+                  "addressPrefix": "[parameters('subnet4Prefix')]",
+                  "networkSecurityGroup": {
+                  "id": "[resourceid('Microsoft.Network/networkSecurityGroups', variables('firstnsgname'))]"
+                    },
+                  "delegations": [
+                {
+                  "name": "databricks-del-private",
+                  "properties": {
+                    "serviceName": "Microsoft.Databricks/workspaces"
+                  }
+                }
+              ]            
+              }
+            }
+          ]
+          }
+        },
+        {
+          "apiVersion": "2017-05-01-preview",
+          "type": "Microsoft.Network/virtualnetworks/providers/diagnosticSettings",
+          "name": "[concat(parameters('virtualnetworkname'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+          "dependsOn": [
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]",
+            "[parameters('virtualnetworkname')]"
+              ],
+          "properties": {
+            "workspaceId": "[resourceId('microsoft.operationalinsights/workspaces/', parameters('loganalyticsWorkspaceName'))]",
+            "logs": [
+                {
+                "category": "VMProtectionAlerts",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                  }
+                }         
+              ],
+            "metrics": [
+                {
+                  "category": "AllMetrics",
+                  "enabled": true,
+                  "retentionPolicy": {
+                    "days": 0,
+                    "enabled": false
+                  }
+                }
+              ],
+              "logAnalyticsDestinationType": "Dedicated"
+          }
+        },
+        {
+          "name": "windowsVM1-NIC",
+          "type": "Microsoft.Network/networkInterfaces",
+          "apiVersion": "2019-11-01",
+          "location": "[parameters('Region')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualnetworkName'))]"
+          ],
+          "tags": {
+            "displayName": "windowsVM1 Network Interface"
+          },
+          "properties": {
+            "ipConfigurations": [
+              {
+                "name": "ipConfig1",
+                "properties": {
+                  "privateIPAllocationMethod": "Dynamic",
+                  "subnet": {
+                    "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworkName'), parameters('subnet1Name'))]"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces/providers/diagnosticSettings",
+            "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+            "apiVersion": "2017-05-01-preview",
+            "properties": {
+              "name": "[concat('windowsVM1-NIC', '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+              "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
+              "logs": [       ],
+              "metrics": [
+                {
+                  "category": "AllMetrics",
+                  "enabled": true,
+                  "retentionPolicy": {
+                    "days": 0,
+                    "enabled": false
+                  }
+                }
+                   ],
+                   "logAnalyticsDestinationType": "Dedicated"
+            },
+            "dependsOn": [
+              "windowsVM1-NIC",
+              "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
+            ]
+        },
+        {
+          "name": "[parameters('vmname')]",
+          "type": "Microsoft.Compute/virtualMachines",
+          "apiVersion": "2019-07-01",
+          "location": "[parameters('Region')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
+          ],
+          "tags": {
+            "displayName": "windowsVM1"
+          },
+          "properties": {
+            "hardwareProfile": {
+              "vmSize": "Standard_D4s_v3"
+            },
+            "osProfile": {
+              "computerName": "[parameters('vmname')]",
+              "adminUsername": "adminUsername",
+              "adminPassword": "[parameters('VMadminpassword')]"
+            },
+            "storageProfile": {
+              "imageReference": {
+                  "publisher": "microsoft-dsvm",
+                  "offer": "dsvm-win-2019",
+                  "sku": "server-2019",
+                  "version": "latest"
+              },
+              "osDisk": {
+                "name": "windowsVM1OSDisk",
+                "caching": "ReadWrite",
+                "createOption": "FromImage"
+              }
+            },
+            "networkProfile": {
+              "networkInterfaces": [
+                {
+                  "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NIC')]"
+                }
+                ]
+              }
+          },
+          "resources": [
+                {
+                    "type": "extensions",
+                    "name": "Microsoft.EnterpriseCloud.Monitoring",
+                    "apiVersion": "2017-03-30",
+                    "location": "[parameters('region')]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                        "type": "[if(equals(parameters('ImageOffer'), 'RHEL'),'OmsAgentForLinux','MicrosoftMonitoringAgent')]",
+                        "typeHandlerVersion": "[if(equals(parameters('ImageOffer'), 'RHEL'),'1.6','1.0')]",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "workspaceId": "[reference(resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName')), '2015-11-01-preview').customerId]"
+                            },
+                        "protectedSettings": {
+                            "workspaceKey": "[listKeys(resourceId(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName')), '2015-03-20').primarySharedKey]"
+                            }
+                        }
+                }
+              ]
+        },
+        {
+          "apiVersion": "2019-02-01",
+          "type": "Microsoft.Network/publicIpAddresses",
+          "name": "[parameters('bastion-ip-name')]",
+          "location": "[parameters('region')]",
+          "sku": {
+              "name": "Standard"
+            },
+          "properties": {
+              "publicIPAllocationMethod": "Static"
+            }
+        },
+        {
+          "type": "Microsoft.Network/publicIPAddresses/providers/diagnosticSettings",
+          "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+            "name": "[concat(parameters('bastion-ip-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+            "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
+            "logs": [
+              {
+                "category": "DDoSProtectionNotifications",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              },
+              {
+                "category": "DDoSMitigationReports",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ],
+            "metrics": [
+              {
+                "category": "AllMetrics",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ],
+            "logAnalyticsDestinationType": "Dedicated"
+          },
+          "dependsOn": [
+            "[parameters('bastion-ip-name')]",
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
+          ]
+        },
+        {
+          "apiVersion": "2020-04-01",
+          "type": "Microsoft.Network/bastionHosts",
+          "name": "[parameters('bastion-host-name')]",
+          "location": "[parameters('region')]",
+          "dependsOn": [
+              "[parameters('bastion-ip-name')]",
+              "[parameters('virtualnetworkname')]"
+            ],
+          "properties": {
+              "ipConfigurations": [
+                  {
+                    "name": "IpConf",
+                    "properties": {
+                        "subnet": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworkname'), parameters('subnet2Name'))]"
+                        },
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIpAddresses', parameters('bastion-ip-name'))]"
+                        }
+                    }
+                  }
+              ]
+          }
+        },
+        {
+          "type": "Microsoft.Network/bastionhosts/providers/diagnosticSettings",
+          "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+            "name": "[concat(parameters('bastion-host-name'), '/microsoft.insights/', parameters('loganalyticsWorkspaceName'))]",          
+            "workspaceId": "[resourceid(resourceGroup().name,'Microsoft.OperationalInsights/workspaces', parameters('loganalyticsWorkspaceName'))]",
+            "logs": [
+              {
+                "category": "BastionAuditLogs",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ],
+            "metrics": [     ],
+            "logAnalyticsDestinationType": "Dedicated"
+          },
+          "dependsOn": [
+            "[parameters('bastion-host-name')]",
+            "[concat('Microsoft.OperationalInsights/workspaces/', parameters('loganalyticsWorkspaceName'))]"
+          ]
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "name": "[parameters('keyVaultName')]",
+            "apiVersion": "2018-02-14",
+            "location": "[parameters('Region')]",
+            "properties": {
+              "tenantId": "[subscription().tenantId]",
+              "accessPolicies": [     ],
+              "sku": {
+                "name": "Standard",
+                "family": "A"
+              },
+              "networkAcls": {
+                  "defaultAction": "Allow",
+                  "bypass": "AzureServices"
+              }
+            }
+        },
+        {
+          "type": "Microsoft.Resources/deployments",
+          "apiVersion": "2019-10-01",
+          "name": "linkedTemplate",
+          "properties": {
+            "mode": "Incremental",
+            "templateLink": {
+              "uri":"https://raw.githubusercontent.com/Vallentyne/AzureDataPlatformDeployments/main/DataPlatform3-arm.json",
+              "contentVersion":"1.0.0.0"
+            },
+            "parameters": {
+              "deploymentlocation": {"value": "[parameters('Region')]"},
+              "workspacename": {"value": "[parameters('dbworkspaceName')]"},
+              "customvirtualnetworkname": {"value": "[parameters('virtualnetworkname')]"},
+              "LogAnalyticsWorkspaceName": {"value": "[parameters('LogAnalyticsWorkspaceName')]"},
+              "synapsename": {"value": "[parameters('synapsename')]"},
+              "defaultDataLakeStorageAccountName": {"value": "[parameters('defaultDataLakeStorageAccountName')]"},
+              "defaultDataLakeStorageFilesystemName": {"value": "[parameters('defaultDataLakeStorageFilesystemName')]"},
+              "sqlAdministratorLogin": {"value": "[parameters('sqlAdministratorLogin')]"},
+              "sqlAdministratorLoginPassword": {"value": "[parameters('sqlAdministratorLoginPassword')]"},
+              "allowAllConnections": {"value": "[parameters('allowAllConnections')]"},
+              "grantWorkspaceIdentityControlForSql": {"value": "[parameters('grantWorkspaceIdentityControlForSql')]"},
+              "managedVirtualNetwork": {"value": "[parameters('managedVirtualNetwork')]"},
+              "adlaResourceId": {"value": "[parameters('adlaResourceId')]"},
+              "storageAccessTier": {"value": "[parameters('storageAccessTier')]"},
+              "storageAccountType": {"value": "[parameters('storageAccountType')]"},
+              "storageSupportsHttpsTrafficOnly": {"value": "[parameters('storageSupportsHttpsTrafficOnly')]"},
+              "storageKind": {"value": "[parameters('storageKind')]"},
+              "storageIsHnsEnabled": {"value": "[parameters('storageIsHnsEnabled')]"},
+              "DataFactoryName": {"value": "[parameters('DataFactoryName')]"}
+
+            }
+          },
+          "dependsOn": [
+            "[parameters('bastion-host-name')]"
+          ]
+        }
+    ],
+    "outputs": {}
+}
