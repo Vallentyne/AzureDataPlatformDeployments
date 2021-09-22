@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "vnetName": {
+        "value": "synapseLZ-vnet"
+      },
+      "vnetAddressSpace": {
+        "value": "10.1.0.0/22"
+      },
+      "egressVirtualApplianceIp": {
+        "value": "10.0.0.10"
+      },
+      "subnetFoundationalElementsName": {
+        "value": "SynapseDefault"
+      },
+      "subnetFoundationalElementsPrefix": {
+        "value": "10.1.0.0/24"
+      },
+      "subnetPresentationName": {
+        "value": "Default"
+      },
+      "subnetPresentationPrefix": {
+        "value": "10.1.1.0/24"
+      },
+      "subnetPrivateEndpointsName": {
+        "value": "PrivEndpoints"
+      },
+      "subnetPrivateEndpointsPrefix": {
+        "value": "10.1.2.0/24"
+      }
+    }
+}
