@@ -1,0 +1,28 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "name": {
+        "value": "synapsecvt992"
+      },
+      "managedResourceGroupName": {
+        "value": "synapsemanagedrg"
+      },
+      "adlsResourceGroupName": {
+        "value": "synapserg"
+      },
+      "adlsName": {
+        "value": "adlsstorcv99"
+      },
+      "adlsFSName": {
+        "value": "fscontainer"
+      },
+      "synapseUsername": {
+        "value": "sqladminuser"
+      },
+      
+      "hubrgname": {
+        "value": "SynHubrg"
+      }
+    }
+  }

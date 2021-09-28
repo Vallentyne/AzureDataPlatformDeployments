@@ -18,8 +18,6 @@ param adminPw string
 
 
 
-
-
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
   name: 'hub-vnet'
 }
@@ -32,7 +30,6 @@ resource vmsubnet 'Microsoft.Network/virtualnetworks/subnets@2015-06-15' existin
   name: 'default'
 }
 
-
 resource publicIp 'Microsoft.Network/publicIpAddresses@2020-05-01' = {
   name: publicIpAddressName
   location: resourceGroup().location
@@ -44,27 +41,26 @@ resource publicIp 'Microsoft.Network/publicIpAddresses@2020-05-01' = {
   }
 }
 
-
 resource bastion 'Microsoft.Network/bastionHosts@2021-02-01' = {
   name: bastionname
   location: resourceGroup().location
   sku: {
     name: 'Basic'
   }
-properties: {
-  ipConfigurations: [
-    {
-      name: 'IpConf'
-      properties: {
-        publicIPAddress: {
-          id: publicIp.id
+    properties: {
+      ipConfigurations: [
+        {
+          name: 'IpConf'
+          properties: {
+            publicIPAddress: {
+              id: publicIp.id
+            }
+            subnet: {
+              id: bastionsubnet.id
+            }
+          }
         }
-        subnet: {
-          id: bastionsubnet.id
-        }
-      }
-    }
-    ]
+        ]
   }
 }
 
@@ -147,3 +143,60 @@ resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
       
   }
 }
+
+resource privsynapse 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.azuresynapse.net'
+  location: 'Global'
+  properties: {}
+}
+
+resource privsynapsedev 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.dev.azuresynapse.net'
+  location: 'Global'
+  properties: {}
+}
+
+resource privsynapsesql 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.sql.azuresynapse.net'
+  location: 'Global'
+  properties: {}
+}
+
+resource privdfs 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.dfs.core.windows.net'
+  location: 'Global'
+  properties: {}
+}
+
+resource privadf 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.adf.azure.com'
+  location: 'Global'
+  properties: {}
+}
+
+resource privanalysis 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.analysis.windows.net'
+  location: 'Global'
+  properties: {}
+}
+
+resource privdatafactory 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.datafactory.azure.net'
+  location: 'Global'
+  properties: {}
+}
+
+resource privpbi 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.pbidedicated.windows.net'
+  location: 'Global'
+  properties: {}
+}
+
+resource privpowerquery 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: 'privatelink.prod.powerquery.microsoft.com'
+  location: 'Global'
+  properties: {}
+}
+
+
+

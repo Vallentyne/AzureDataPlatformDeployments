@@ -9,7 +9,7 @@
         "value": "10.0.0.0/22"
       },
       "egressVirtualApplianceIp": {
-        "value": "10.0.0.10"
+        "value": "10.0.0.4"
       },
       "subnetFoundationalElementsName": {
         "value": "AzureFirewallSubnet"

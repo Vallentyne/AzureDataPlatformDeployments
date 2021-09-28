@@ -9,10 +9,10 @@
         "value": "10.1.0.0/22"
       },
       "egressVirtualApplianceIp": {
-        "value": "10.0.0.10"
+        "value": "10.0.0.4"
       },
       "subnetFoundationalElementsName": {
-        "value": "SynapseDefault"
+        "value": "powerplat"
       },
       "subnetFoundationalElementsPrefix": {
         "value": "10.1.0.0/24"
