@@ -13,15 +13,13 @@ param name string
 @description('Synapse Analytics Managed Resource Group Name.')
 param managedResourceGroupName string
 
-// ADLS Gen 2
-@description('Azure Data Lake Store Gen2 Resource Group Name.')
-param adlsResourceGroupName string
-
 @description('Azure Data Lake Store Gen2 Name.')
 param adlsName string
 
 @description('Azure Data Lake Store File System Name.')
 param adlsFSName string
+
+param Datafactory string
 
 // Credentials
 @description('Synapse Analytics Username.')
@@ -52,6 +50,16 @@ resource synapsePrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' exi
 resource synapsedevPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
   scope: resourceGroup(hubrgname)
   name: 'privatelink.dev.azuresynapse.net'
+}
+
+resource adfPortalPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
+  scope: resourceGroup(hubrgname)
+  name: 'privatelink.adf.azure.com'
+}
+
+resource adfPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
+  scope: resourceGroup(hubrgname)
+  name: 'privatelink.datafactory.azure.net'
 }
 
 resource adlsstorage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
@@ -275,6 +283,90 @@ resource synapse_workspace_sql_on_demand_pe 'Microsoft.Network/privateEndpoints@
           groupIds: [
             'sqlondemand'
           ]
+        }
+      }
+    ]
+  }
+}
+
+resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
+  name: Datafactory
+  location: resourceGroup().location
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    publicNetworkAccess: 'Disabled'
+  }
+
+}
+
+resource datafactoryportalpe 'Microsoft.Network/privateEndpoints@2021-02-01' = {
+  location: resourceGroup().location
+  name: '${datafactory.name}-portal-privend'
+  properties: {
+    subnet: {
+      id: privendsubnet.id
+    }
+    privateLinkServiceConnections: [
+      {
+        name: '${datafactory.name}-portal-privend'
+        properties: {
+          privateLinkServiceId: datafactory.id
+          groupIds: [
+            'portal'
+          ]
+        }
+      }
+    ]
+  }
+}
+
+resource datafactorype 'Microsoft.Network/privateEndpoints@2021-02-01' = {
+  location: resourceGroup().location
+  name: '${datafactory.name}-privend'
+  properties: {
+    subnet: {
+      id: privendsubnet.id
+    }
+    privateLinkServiceConnections: [
+      {
+        name: '${datafactory.name}-privend'
+        properties: {
+          privateLinkServiceId: datafactory.id
+          groupIds: [
+            'datafactory'
+          ]
+        }
+      }
+    ]
+  }
+}
+
+resource datafactory_portal_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
+  parent: datafactoryportalpe
+  name: '${datafactory.name}-portalreg'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'privatelink-adf-portal'
+        properties: {
+          privateDnsZoneId: adfPortalPrivateZoneId.id
+        }
+      }
+    ]
+  }
+}
+
+resource datafactory_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
+  parent: datafactorype
+  name: '${datafactory.name}-reg'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'privatelink-adf'
+        properties: {
+          privateDnsZoneId: adfPrivateZoneId.id
         }
       }
     ]

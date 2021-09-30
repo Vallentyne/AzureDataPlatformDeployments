@@ -8,9 +8,6 @@
       "managedResourceGroupName": {
         "value": "synapsemanagedrg"
       },
-      "adlsResourceGroupName": {
-        "value": "synapserg"
-      },
       "adlsName": {
         "value": "adlsstorcv99"
       },
@@ -23,6 +20,9 @@
       
       "hubrgname": {
         "value": "SynHubrg"
+      },
+      "Datafactory":{
+        "value": "azfcv9999"
       }
     }
   }

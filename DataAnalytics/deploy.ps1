@@ -11,5 +11,3 @@ az deployment group create --resource-group SynHubRG --template-file .\hubresour
 
 az deployment group create --resource-group SynapseRG --template-file .\main2.bicep --parameters .\main2.parameters.json
 
-
-
