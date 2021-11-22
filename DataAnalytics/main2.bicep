@@ -196,6 +196,21 @@ resource synapse_workspace_web_pe 'Microsoft.Network/privateEndpoints@2020-06-01
   }
 }
 
+resource synapse_workspace_web_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
+  parent: synapse_workspace_web_pe
+  name: '${synapse.name}-webreg'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'privatelink-synapse-workspace-web'
+        properties: {
+          privateDnsZoneId: synapsePrivateZoneId.id
+        }
+      }
+    ]
+  }
+}
+
 resource synapse_workspace_dev_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
   location: resourceGroup().location
   name: '${synapse.name}-workspace-dev-endpoint'
@@ -217,6 +232,21 @@ resource synapse_workspace_dev_pe 'Microsoft.Network/privateEndpoints@2020-06-01
   }
 }
 
+resource synapse_workspace_dev_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
+  parent: synapse_workspace_dev_pe
+  name: '${synapse.name}-dev-reg'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'privatelink-synapse-workspace-dev'
+        properties: {
+          privateDnsZoneId: synapsePrivateZoneId.id
+        }
+      }
+    ]
+  }
+}
+
   resource synapse_workspace_sql_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
     location: resourceGroup().location
     name: '${synapse.name}-workspace-sql-endpoint'
@@ -232,21 +262,6 @@ resource synapse_workspace_dev_pe 'Microsoft.Network/privateEndpoints@2020-06-01
             groupIds: [
               'sql'
             ]
-          }
-        }
-      ]
-    }
-  }
-
-  resource synapse_workspace_dev_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
-    parent: synapse_workspace_dev_pe
-    name: '${synapse.name}-dev-reg'
-    properties: {
-      privateDnsZoneConfigs: [
-        {
-          name: 'privatelink-synapse-workspace-dev'
-          properties: {
-            privateDnsZoneId: synapsePrivateZoneId.id
           }
         }
       ]
@@ -283,6 +298,21 @@ resource synapse_workspace_sql_on_demand_pe 'Microsoft.Network/privateEndpoints@
           groupIds: [
             'sqlondemand'
           ]
+        }
+      }
+    ]
+  }
+}
+
+resource synapse_workspace_sql_on_demand_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
+  parent: synapse_workspace_sql_on_demand_pe
+  name: '${synapse.name}-sqlondemandreg'
+  properties: {
+    privateDnsZoneConfigs: [
+      {
+        name: 'privatelink-synapse-workspace-sqlondeman'
+        properties: {
+          privateDnsZoneId: synapsePrivateZoneId.id
         }
       }
     ]

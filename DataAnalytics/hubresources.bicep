@@ -30,6 +30,11 @@ resource vmsubnet 'Microsoft.Network/virtualnetworks/subnets@2015-06-15' existin
   name: 'default'
 }
 
+resource lzvnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
+  name: 'synapseLZ-vnet'
+  scope: resourceGroup('SynapseRG')
+}
+
 resource publicIp 'Microsoft.Network/publicIpAddresses@2020-05-01' = {
   name: publicIpAddressName
   location: resourceGroup().location
@@ -150,10 +155,34 @@ resource privsynapse 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   properties: {}
 }
 
+resource privsynapselink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privsynapselink'
+  location: 'Global' 
+  parent: privsynapse
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
+}
+
 resource privsynapsedev 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.dev.azuresynapse.net'
   location: 'Global'
   properties: {}
+}
+
+resource privsynapsedevlink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privsynapsedevlink'
+  location: 'Global' 
+  parent: privsynapsedev
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
 }
 
 resource privsynapsesql 'Microsoft.Network/privateDnsZones@2020-06-01' = {
@@ -162,10 +191,34 @@ resource privsynapsesql 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   properties: {}
 }
 
+resource privsynapsesqllink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privsynapsesqllink'
+  location: 'Global' 
+  parent: privsynapsesql
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
+}
+
 resource privdfs 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.dfs.core.windows.net'
   location: 'Global'
   properties: {}
+}
+
+resource privdfslink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privdfslink'
+  location: 'Global' 
+  parent: privdfs
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
 }
 
 resource privadf 'Microsoft.Network/privateDnsZones@2020-06-01' = {
@@ -174,10 +227,34 @@ resource privadf 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   properties: {}
 }
 
+resource privadflink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privadflink'
+  location: 'Global' 
+  parent: privadf
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
+}
+
 resource privanalysis 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.analysis.windows.net'
   location: 'Global'
   properties: {}
+}
+
+resource privanalysislink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privanalysislink'
+  location: 'Global' 
+  parent: privanalysis
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
 }
 
 resource privdatafactory 'Microsoft.Network/privateDnsZones@2020-06-01' = {
@@ -186,16 +263,52 @@ resource privdatafactory 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   properties: {}
 }
 
+resource privdatafactorylink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privdatafactorylink'
+  location: 'Global' 
+  parent: privdatafactory
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
+}
+
 resource privpbi 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.pbidedicated.windows.net'
   location: 'Global'
   properties: {}
 }
 
+resource privpbilink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privpbilink'
+  location: 'Global' 
+  parent: privpbi
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
+}
+
 resource privpowerquery 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.prod.powerquery.microsoft.com'
   location: 'Global'
   properties: {}
+}
+
+resource privpowerquerylink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privpowerquerylink'
+  location: 'Global' 
+  parent: privpowerquery
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: lzvnet.id
+    }
+  }
 }
 
 
