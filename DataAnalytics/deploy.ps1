@@ -1,6 +1,6 @@
 
-az group create --location canadacentral --resource-group SynapseRG
-az group create --location canadacentral --resource-group SynHubRG
+#az group create --location canadacentral --resource-group SynapseRG
+#az group create --location canadacentral --resource-group SynHubRG
 
 
 az deployment group create --resource-group SynapseRG --template-file .\networking.bicep --parameters .\networking-syn.parameters.json

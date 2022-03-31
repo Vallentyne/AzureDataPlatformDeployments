@@ -115,10 +115,10 @@ resource adlsstorage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 }
 
 
-resource synapsePrivateLinkHub 'Microsoft.Synapse/privateLinkHubs@2021-03-01' = {
+/* resource synapsePrivateLinkHub 'Microsoft.Synapse/privateLinkHubs@2021-03-01' = {
   name: '${toLower(name)}plhub'
   location: resourceGroup().location
-}
+} */
 
 resource synapse 'Microsoft.Synapse/workspaces@2021-03-01' = {
   dependsOn: [
@@ -175,7 +175,7 @@ resource synapse 'Microsoft.Synapse/workspaces@2021-03-01' = {
   }
 }
 
-resource synapse_workspace_web_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
+/* resource synapse_workspace_web_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
   location: resourceGroup().location
   name: '${synapse.name}-web-endpoint'
   properties: {
@@ -194,9 +194,9 @@ resource synapse_workspace_web_pe 'Microsoft.Network/privateEndpoints@2020-06-01
       }
     ]
   }
-}
+} */
 
-resource synapse_workspace_web_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
+/* resource synapse_workspace_web_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
   parent: synapse_workspace_web_pe
   name: '${synapse.name}-webreg'
   properties: {
@@ -209,7 +209,7 @@ resource synapse_workspace_web_reg 'Microsoft.Network/privateEndpoints/privateDn
       }
     ]
   }
-}
+} */
 
 resource synapse_workspace_dev_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
   location: resourceGroup().location
