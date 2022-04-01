@@ -4,6 +4,8 @@
 // OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 // ----------------------------------------------------------------------------------
 
+param location string = 'canadacentral'
+
 // VNET
 param vnetName string
 param vnetAddressSpace string
@@ -28,7 +30,7 @@ param subnetPrivateEndpointsPrefix string
 // Route Tables
 resource udrApplication 'Microsoft.Network/routeTables@2020-06-01' = {
   name: '${subnetPresentationName}Udr'
-  location: resourceGroup().location
+  location: location
   properties: {
     routes: [
       {
@@ -46,7 +48,7 @@ resource udrApplication 'Microsoft.Network/routeTables@2020-06-01' = {
 // Virtual Network
 resource vnet 'Microsoft.Network/virtualNetworks@2020-06-01' = {
   name: vnetName
-  location: resourceGroup().location
+  location: location
   properties: {
     addressSpace: {
       addressPrefixes: [

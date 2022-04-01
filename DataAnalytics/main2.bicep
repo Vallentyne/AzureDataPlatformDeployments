@@ -7,6 +7,8 @@
 // OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
 // ----------------------------------------------------------------------------------
 
+param location string = 'canadacentral'
+
 @description('Synapse Analytics name.')
 param name string
 
@@ -64,7 +66,7 @@ resource adfPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existin
 
 resource adlsstorage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: adlsName
-  location: resourceGroup().location
+  location: location
   identity: {
       type: 'SystemAssigned'
     }
@@ -121,12 +123,9 @@ resource adlsstorage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 } */
 
 resource synapse 'Microsoft.Synapse/workspaces@2021-03-01' = {
-  dependsOn: [
-    adlsstorage
-    
-  ]
+  dependsOn: [  ]
   name: name
-  location: resourceGroup().location
+  location: location
   properties: {
     sqlAdministratorLoginPassword: synapsePassword
     managedResourceGroupName: managedResourceGroupName
@@ -212,7 +211,7 @@ resource synapse 'Microsoft.Synapse/workspaces@2021-03-01' = {
 } */
 
 resource synapse_workspace_dev_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
-  location: resourceGroup().location
+  location: location
   name: '${synapse.name}-workspace-dev-endpoint'
   properties: {
     subnet: {
@@ -248,7 +247,7 @@ resource synapse_workspace_dev_reg 'Microsoft.Network/privateEndpoints/privateDn
 }
 
   resource synapse_workspace_sql_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
-    location: resourceGroup().location
+    location: location
     name: '${synapse.name}-workspace-sql-endpoint'
     properties: {
       subnet: {
@@ -284,7 +283,7 @@ resource synapse_workspace_dev_reg 'Microsoft.Network/privateEndpoints/privateDn
   }
 
 resource synapse_workspace_sql_on_demand_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
-  location: resourceGroup().location
+  location: location
   name: '${synapse.name}-workspace-sql-ondemand-endpoint'
   properties: {
     subnet: {
@@ -321,7 +320,7 @@ resource synapse_workspace_sql_on_demand_reg 'Microsoft.Network/privateEndpoints
 
 resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   name: Datafactory
-  location: resourceGroup().location
+  location: location
   identity: {
     type: 'SystemAssigned'
   }
@@ -332,7 +331,7 @@ resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
 }
 
 resource datafactoryportalpe 'Microsoft.Network/privateEndpoints@2021-02-01' = {
-  location: resourceGroup().location
+  location: location
   name: '${datafactory.name}-portal-privend'
   properties: {
     subnet: {
@@ -353,7 +352,7 @@ resource datafactoryportalpe 'Microsoft.Network/privateEndpoints@2021-02-01' = {
 }
 
 resource datafactorype 'Microsoft.Network/privateEndpoints@2021-02-01' = {
-  location: resourceGroup().location
+  location: location
   name: '${datafactory.name}-privend'
   properties: {
     subnet: {

@@ -15,7 +15,7 @@ param vmSize string = 'Standard_D2s_v4'
 param adminUsername string = 'datavmadmin'
 @secure()
 param adminPw string
-
+param location string = 'canadacentral'
 
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
@@ -37,7 +37,7 @@ resource lzvnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
 
 resource publicIp 'Microsoft.Network/publicIpAddresses@2020-05-01' = {
   name: publicIpAddressName
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Standard'
   }
@@ -48,7 +48,7 @@ resource publicIp 'Microsoft.Network/publicIpAddresses@2020-05-01' = {
 
 resource bastion 'Microsoft.Network/bastionHosts@2021-02-01' = {
   name: bastionname
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Basic'
   }
@@ -71,7 +71,7 @@ resource bastion 'Microsoft.Network/bastionHosts@2021-02-01' = {
 
 resource nic 'Microsoft.Network/networkInterfaces@2020-06-01' = {
   name: '${datavm}-nic'
-  location: resourceGroup().location
+  location: location
   properties: {
       enableAcceleratedNetworking: false
       ipConfigurations: [
@@ -92,7 +92,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2020-06-01' = {
 
 resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
   name: datavm
-  location: resourceGroup().location
+  location: location
   
   properties: {
       hardwareProfile: {
@@ -149,24 +149,6 @@ resource vm 'Microsoft.Compute/virtualMachines@2020-06-01' = {
   }
 }
 
-resource privsynapse 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: 'privatelink.azuresynapse.net'
-  location: 'Global'
-  properties: {}
-}
-
-resource privsynapselink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
-  name: 'privsynapselink'
-  location: 'Global' 
-  parent: privsynapse
-  properties: {
-    registrationEnabled: false
-    virtualNetwork: {
-      id: lzvnet.id
-    }
-  }
-}
-
 resource privsynapsedev 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.dev.azuresynapse.net'
   location: 'Global'
@@ -181,6 +163,18 @@ resource privsynapsedevlink 'Microsoft.Network/privateDnsZones/virtualNetworkLin
     registrationEnabled: false
     virtualNetwork: {
       id: lzvnet.id
+    }
+  }
+}
+
+resource privsynapsedevlinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privsynapsedevlinkhub'
+  location: 'Global' 
+  parent: privsynapsedev
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
     }
   }
 }
@@ -203,6 +197,18 @@ resource privsynapsesqllink 'Microsoft.Network/privateDnsZones/virtualNetworkLin
   }
 }
 
+resource privsynapsesqllinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privsynapsesqllinkhub'
+  location: 'Global' 
+  parent: privsynapsesql
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
+    }
+  }
+}
+
 resource privdfs 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.dfs.core.windows.net'
   location: 'Global'
@@ -217,6 +223,18 @@ resource privdfslink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020
     registrationEnabled: false
     virtualNetwork: {
       id: lzvnet.id
+    }
+  }
+}
+
+resource privdfslinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privdfslinkhub'
+  location: 'Global' 
+  parent: privdfs
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
     }
   }
 }
@@ -239,6 +257,18 @@ resource privadflink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020
   }
 }
 
+resource privadflinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privadflinkhub'
+  location: 'Global' 
+  parent: privadf
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
+    }
+  }
+}
+
 resource privanalysis 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.analysis.windows.net'
   location: 'Global'
@@ -253,6 +283,18 @@ resource privanalysislink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks
     registrationEnabled: false
     virtualNetwork: {
       id: lzvnet.id
+    }
+  }
+}
+
+resource privanalysislinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privanalysislinkhub'
+  location: 'Global' 
+  parent: privanalysis
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
     }
   }
 }
@@ -275,6 +317,19 @@ resource privdatafactorylink 'Microsoft.Network/privateDnsZones/virtualNetworkLi
   }
 }
 
+resource privdatafactorylinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privdatafactorylinkhub'
+  location: 'Global' 
+  parent: privdatafactory
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
+    }
+  }
+}
+
+
 resource privpbi 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.pbidedicated.windows.net'
   location: 'Global'
@@ -289,6 +344,18 @@ resource privpbilink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020
     registrationEnabled: false
     virtualNetwork: {
       id: lzvnet.id
+    }
+  }
+}
+
+resource privpbilinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privpbilinkhub'
+  location: 'Global' 
+  parent: privpbi
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
     }
   }
 }
@@ -311,5 +378,16 @@ resource privpowerquerylink 'Microsoft.Network/privateDnsZones/virtualNetworkLin
   }
 }
 
+resource privpowerquerylinkhub 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  name: 'privpowerquerylinkhub'
+  location: 'Global' 
+  parent: privpowerquery
+  properties: {
+    registrationEnabled: false
+    virtualNetwork: {
+      id: vnet.id
+    }
+  }
+}
 
 
