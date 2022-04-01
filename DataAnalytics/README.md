@@ -9,11 +9,9 @@ Deploys the following resources:
 - Network representing a hub
 - Virtual machine representing a client PC
 - Bastion host
-- Private DNS Zones
+- Private DNS Zones, linked to both networks
 - Private endpoints for Synapse, Data Factory, storage accounts
 
-## Post Deployment Tasks
+## Deploy
 
-Several steps are currently manual:
-
-- Some private endpoint configurations are still not automated.
+Run the deploy script from a logged in Azure powershell instance.
