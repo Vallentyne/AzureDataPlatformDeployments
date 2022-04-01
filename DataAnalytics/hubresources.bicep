@@ -329,7 +329,6 @@ resource privdatafactorylinkhub 'Microsoft.Network/privateDnsZones/virtualNetwor
   }
 }
 
-
 resource privpbi 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.pbidedicated.windows.net'
   location: 'Global'

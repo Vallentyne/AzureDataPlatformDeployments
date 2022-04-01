@@ -44,14 +44,19 @@ resource privendsubnet 'Microsoft.Network/virtualnetworks/subnets@2015-06-15' ex
   name: 'PrivEndpoints'
 }
 
-resource synapsePrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
+resource synapseDevPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
   scope: resourceGroup(hubrgname)
-  name: 'privatelink.azuresynapse.net'
+  name: 'privatelink.dev.azuresynapse.net'
 }
 
 resource synapsedevPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
   scope: resourceGroup(hubrgname)
   name: 'privatelink.dev.azuresynapse.net'
+}
+
+resource synapsesqlPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
+  scope: resourceGroup(hubrgname)
+  name: 'privatelink.sql.azuresynapse.net'
 }
 
 resource adfPortalPrivateZoneId 'Microsoft.Network/privateDnsZones@2020-06-01' existing = {
@@ -111,11 +116,10 @@ resource adlsstorage 'Microsoft.Storage/storageAccounts@2021-04-01' = {
         properties: {
         metadata: {}
         publicAccess: 'None'
+      }
     }
   }
 }
-}
-
 
 /* resource synapsePrivateLinkHub 'Microsoft.Synapse/privateLinkHubs@2021-03-01' = {
   name: '${toLower(name)}plhub'
@@ -239,14 +243,14 @@ resource synapse_workspace_dev_reg 'Microsoft.Network/privateEndpoints/privateDn
       {
         name: 'privatelink-synapse-workspace-dev'
         properties: {
-          privateDnsZoneId: synapsePrivateZoneId.id
+          privateDnsZoneId: synapsedevPrivateZoneId.id
         }
       }
     ]
   }
 }
 
-  resource synapse_workspace_sql_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
+resource synapse_workspace_sql_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
     location: location
     name: '${synapse.name}-workspace-sql-endpoint'
     properties: {
@@ -265,9 +269,9 @@ resource synapse_workspace_dev_reg 'Microsoft.Network/privateEndpoints/privateDn
         }
       ]
     }
-  }
+}
 
-  resource synapse_workspace_sql_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
+resource synapse_workspace_sql_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
     parent: synapse_workspace_sql_pe
     name: '${synapse.name}-sqlreg'
     properties: {
@@ -275,12 +279,12 @@ resource synapse_workspace_dev_reg 'Microsoft.Network/privateEndpoints/privateDn
         {
           name: 'privatelink-synapse-workspace-sql'
           properties: {
-            privateDnsZoneId: synapsePrivateZoneId.id
+            privateDnsZoneId: synapsesqlPrivateZoneId.id
           }
         }
       ]
     }
-  }
+}
 
 resource synapse_workspace_sql_on_demand_pe 'Microsoft.Network/privateEndpoints@2020-06-01' = {
   location: location
@@ -296,11 +300,11 @@ resource synapse_workspace_sql_on_demand_pe 'Microsoft.Network/privateEndpoints@
           privateLinkServiceId: synapse.id
           groupIds: [
             'sqlondemand'
-          ]
+            ]
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
 }
 
 resource synapse_workspace_sql_on_demand_reg 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-02-01' = {
@@ -311,11 +315,11 @@ resource synapse_workspace_sql_on_demand_reg 'Microsoft.Network/privateEndpoints
       {
         name: 'privatelink-synapse-workspace-sqlondeman'
         properties: {
-          privateDnsZoneId: synapsePrivateZoneId.id
+          privateDnsZoneId: synapsesqlPrivateZoneId.id
+          }
         }
-      }
-    ]
-  }
+      ]
+    }
 }
 
 resource datafactory 'Microsoft.DataFactory/factories@2018-06-01' = {
